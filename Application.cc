@@ -37,7 +37,7 @@ class Application {
                     break;
             }
 
-            string command = "osascript -e 'tell application \"" + this->getName() + "\"\nset bounds of  front window to " + bounds + "\nend tell'";
+            string command = "osascript -e 'tell application \"" + this->getName() + "\"\nset bounds of  front window to " + bounds + "\nactivate\nnd tell'";
             cout << command << endl;
             Utils::getStdoutFromCommand(command);
         }
