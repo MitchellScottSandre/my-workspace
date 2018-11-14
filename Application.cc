@@ -37,16 +37,18 @@ class Application {
                     break;
             }
 
-            string command = "osascript -e 'tell application \"" + this->getName() + "\"\nset bounds of  front window to " + bounds + "\nactivate\nnd tell'";
+            string command = "osascript -e 'tell application \"" + this->getName() + "\"\nset bounds of front window to " + bounds + "\nactivate\nend tell'";
             cout << command << endl;
             Utils::getStdoutFromCommand(command);
         }
 
         void setup(DisplayDimensions displayDimensions) {
             open();
-            Utils::delay(1);
+            Utils::delay(2);
             putInPosition(displayDimensions);
-            Utils::delay(1);
+            putInPosition(displayDimensions);
+            putInPosition(displayDimensions);
+            Utils::delay(2);
         }
         
         string getName() {

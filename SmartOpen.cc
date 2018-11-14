@@ -6,8 +6,6 @@
 #include "Desktop.cc"
 using namespace std;
 
-struct foo {};
-
 vector<string> getApplicationNamesList() {
     const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
     const string applicationNamesText = Utils::getStdoutFromCommand(GET_APPLICATION_NAMES_COMMAND);
