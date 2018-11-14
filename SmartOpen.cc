@@ -6,19 +6,17 @@
 #include "Desktop.cc"
 using namespace std;
 
-vector<string> getApplicationNamesList() {
-    const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
-    const string applicationNamesText = Utils::getStdoutFromCommand(GET_APPLICATION_NAMES_COMMAND);
-    stringstream ss(applicationNamesText);
-    vector<string> namesList;
-    string tempName;
+class SmartOpen {
+    vector<string> APPLICATION_NAMES;
+    string desiredWorkspaceSetup;
 
-    while (getline(ss, tempName, '\n')) {
-        namesList.emplace_back(tempName);
+    SmartOpen() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
+
+    void run() {
+        
     }
 
-    return namesList;
-}
+};
 
 string getDesktopSetupInput() {
     cout << "Enter desired desktop(s) setup." << endl;
@@ -63,7 +61,6 @@ void setupApplications(const string desiredSetup) {
 ************** Main  **************
 **********************************/
 
-// TODO: error handling
 int main() {
     // const string command = "osascript -e 'tell application \"System Events\" to tell spaces preferences of expose preferences'";
     // const string command = "osascript -e 'tell application \"Finder\" to open the startup disk'";
@@ -72,7 +69,8 @@ int main() {
     // const string username = Utils::getStdoutFromCommand("whoami");
     // std::cout << username << std::endl;
     // Utils::getStdoutFromCommand("osascript -e 'tell application \"System Events\" to key code 124 using control down'");
-
+    SmartOpen program;
+    program.run();
     const vector<string> APPLICATION_NAMES = getApplicationNamesList();
     const string desiredSetup = getDesktopSetupInput();
     setupApplications(desiredSetup);

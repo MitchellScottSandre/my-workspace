@@ -8,6 +8,20 @@
 using namespace std;
 
 namespace Utils {
+    static vector<string> getApplicationNamesList() {
+        const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
+        const string applicationNamesText = Utils::getStdoutFromCommand(GET_APPLICATION_NAMES_COMMAND);
+        stringstream ss(applicationNamesText);
+        vector<string> namesList;
+        string tempName;
+
+        while (getline(ss, tempName, '\n')) {
+            namesList.emplace_back(tempName);
+        }
+
+        return namesList;
+    }
+
     static vector<string> splitByCharDelimiter(string & str, char delim) {
         vector<string> data;
         stringstream ss(str);

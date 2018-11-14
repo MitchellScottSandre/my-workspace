@@ -35,16 +35,22 @@ public:
         string desktopToken;
 
         while ((desktopDelimeterIndex = input.find(desktopDelimiter)) != string::npos) {
-            // Parse desktop token
             desktopToken = input.substr(0, desktopDelimeterIndex);
             int applicationDelimeterIndex = desktopToken.find(applicationDelimiter);
-            string leftAppName = Utils::trim(desktopToken.substr(0, applicationDelimeterIndex));
-            string rightAppName = Utils::trim(desktopToken.substr(applicationDelimeterIndex + 1));
 
-
-            // Create Desktop
-            // desktops.emplace_back(new Desktop(leftApp, rightApp));
-            desktops.emplace_back(Desktop(leftAppName, rightAppName));
+            string leftAppName = "";
+            string middleAppName = "";
+            string rightAppName = "";
+            
+            if (applicationDelimeterIndex == string::npos) {
+                middleAppName = Utils::trim(desktopToken);
+                cout << desktopToken << endl;
+                desktops.emplace_back(Desktop(middleAppName));
+            } else {
+                leftAppName = Utils::trim(desktopToken.substr(0, applicationDelimeterIndex));
+                rightAppName = Utils::trim(desktopToken.substr(applicationDelimeterIndex + 1));
+                desktops.emplace_back(Desktop(leftAppName, rightAppName));
+            }
 
             // Remove token from input 
             input.erase(0, desktopDelimeterIndex + desktopDelimiter.length());
