@@ -9,9 +9,10 @@ using namespace std;
 struct SmartOpen::SmartOpenImpl {
     vector<string> APPLICATION_NAMES;
     string desiredSetup;
+    Event currentEvent;
 
     // SmartOpenImpl() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
-    SmartOpenImpl() {}
+    SmartOpenImpl() : currentEvent{Event(Event::EventType::NULL_EVENT)} {}
 };
 
 SmartOpen::SmartOpen() : smartOpenPimpl{make_unique<SmartOpenImpl>()} {}
@@ -19,30 +20,36 @@ SmartOpen::SmartOpen() : smartOpenPimpl{make_unique<SmartOpenImpl>()} {}
 SmartOpen::~SmartOpen() {}
 
 void SmartOpen::run() {
-    
+    emitEvent(Event::EventType::DISPLAY_WELCOME);
+    emitEvent(Event::EventType::GET_DESKTOP_SETUP_INPUT);
+}
+
+void SmartOpen::emitEvent(Event e) {
+    this->smartOpenPimpl->currentEvent = e;
+    this->notifyObservers();
 }
 
 Event SmartOpen::getLastEvent() {
-    return Event(Event::EventType::DISPLAY_WELCOME);
+    return this->smartOpenPimpl->currentEvent;
 }
    
 
 //     SmartOpen() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
 
 //     string getSetupInput() {
-//         cout << "Enter desired desktop(s) setup." << endl;
-//         cout << "Format: " << endl;
-//         cout << "DESK_1_LEFT_APP | DESK_1_RIGHT_APP || DESK_2_MIDDLE_APP || <FULL_SCREEN_APP> || ..." << endl;
-//         string input;
-//         getline(cin, input);
+        // cout << "Enter desired desktop(s) setup." << endl;
+        // cout << "Format: " << endl;
+        // cout << "DESK_1_LEFT_APP | DESK_1_RIGHT_APP || DESK_2_MIDDLE_APP || <FULL_SCREEN_APP> || ..." << endl;
+        // string input;
+        // getline(cin, input);
 
-//         bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
+        // bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
         
-//         if (!endsWithCorrectDelimiter) {
-//             input += "||";
-//         }
+        // if (!endsWithCorrectDelimiter) {
+        //     input += "||";
+        // }
 
-//         return input;
+        // return input;
 //     }
 
 //     void setupApplications(const string desiredSetup) {

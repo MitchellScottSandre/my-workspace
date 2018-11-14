@@ -14,3 +14,11 @@ struct Controller::ControllerImpl {
 Controller::Controller(shared_ptr<SmartOpen> m) : controllerPimpl{make_unique<ControllerImpl>(m)} {}
 
 Controller::~Controller() {}
+
+void Controller::didGetDesktopSetupInput(string input) {
+    bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
+    
+    if (!endsWithCorrectDelimiter) {
+        input += "||";
+    }
+}

@@ -18,7 +18,7 @@ public:
 
     void getNotified();
     void displayWelcome();
-
+    void getDesktopSetupInput();
 };
 
 

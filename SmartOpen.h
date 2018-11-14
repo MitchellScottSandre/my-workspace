@@ -21,6 +21,7 @@ public:
     ~SmartOpen();
 
     void run();
+    void emitEvent(Event e);
     Event getLastEvent();
 };
 

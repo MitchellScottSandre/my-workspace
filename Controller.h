@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #include <iostream>
 
 class SmartOpen;
@@ -15,6 +14,8 @@ class Controller {
 public:
     Controller(std::shared_ptr<SmartOpen> m);
     ~Controller();
+
+    void didGetDesktopSetupInput(std::string input);
 };
 
 #endif

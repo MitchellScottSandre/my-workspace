@@ -23,9 +23,31 @@ void View::getNotified() {
 
     switch (e.eventType) {
         case Event::EventType::DISPLAY_WELCOME:
-
+            displayWelcome();
+            break;
+        case Event::EventType::GET_DESKTOP_SETUP_INPUT:
+            getDesktopSetupInput();
             break;
         default:
-
+            throw;
     }
+}
+
+//
+
+void View::displayWelcome() {
+    cout << endl;
+    cout << "displayWelcome" << endl;
+}
+
+void View::getDesktopSetupInput() {
+    cout << endl;
+    cout << "Enter desired desktop(s) setup." << endl;
+    cout << "Format: DESK_1_APP(s) || DESK_2_APP(s) || ..." << endl;
+    cout << "Apps Format: APP_LEFT | APP_RIGHT    OR    APP_CENTRE    OR    <APP_FULL_SCREEN>" << endl;
+
+    string input;
+    getline(cin, input);
+
+    viewPimpl->controller->didGetDesktopSetupInput(input);
 }
