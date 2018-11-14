@@ -14,6 +14,9 @@ struct View::ViewImpl {
     ~ViewImpl() {}
 };
 
+const string View::DESKTOP_DELIMITER = "||";
+const string View::APPLICATION_DELIMITER = "|";
+
 View::View(shared_ptr<Controller> c, shared_ptr<SmartOpen> m) : viewPimpl{make_unique<ViewImpl>(c, m)} {}
 
 View::~View() {}
@@ -49,5 +52,5 @@ void View::getDesktopSetupInput() {
     string input;
     getline(cin, input);
 
-    viewPimpl->controller->didGetDesktopSetupInput(input);
+    viewPimpl->controller->receivedDesktopSetupInput(input);
 }

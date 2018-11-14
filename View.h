@@ -13,6 +13,9 @@ private:
     std::unique_ptr<ViewImpl> viewPimpl;
     
 public:
+    static const std::string DESKTOP_DELIMITER;
+    static const std::string APPLICATION_DELIMITER;
+
     View(std::shared_ptr<Controller> c, std::shared_ptr<SmartOpen> m);
     ~View();
 

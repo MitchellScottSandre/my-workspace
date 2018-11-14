@@ -1,6 +1,9 @@
 #include "Controller.h"
 #include "SmartOpen.h"
 #include "View.h"
+#include "StringSplitter.h"
+#include "StringTrimmer.h"
+#include "ScriptRunner.h"
 using namespace std;
 
 struct Controller::ControllerImpl {
@@ -15,10 +18,41 @@ Controller::Controller(shared_ptr<SmartOpen> m) : controllerPimpl{make_unique<Co
 
 Controller::~Controller() {}
 
-void Controller::didGetDesktopSetupInput(string input) {
-    bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
+/***************************************
+ *            Public Methods           *
+ ***************************************/
+
+void Controller::receivedDesktopSetupInput(string input) {
+    // fixDesktopSetupInputDelimiters(input);
+    bool validApplicationNames = validDesktopSetupInputNames(input);
+}
+
+/***************************************
+ *            Private Methods          *
+ ***************************************/
+
+// void Controller::fixDesktopSetupInputDelimiters(string & input) {
+//     bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == View::DESKTOP_DELIMITER;
     
-    if (!endsWithCorrectDelimiter) {
-        input += "||";
+//     if (!endsWithCorrectDelimiter) {
+//         input += "||";
+//     }
+// }
+
+bool Controller::validDesktopSetupInputNames(string input) {
+    vector<string> desktops;
+    vector<string> APPLICATION_NAMES = ScriptRunner::getApplicationNamesList();
+    StringSplitter::split(desktops, input, View::DESKTOP_DELIMITER);
+
+    for (string desktopText : desktops) {
+        StringTrimmer::trim(desktopText);
+        vector<string> applications;
+        StringSplitter::split(applications, desktopText, View::APPLICATION_DELIMITER);
+
+        for (string applicationName : applications) {
+            StringTrimmer::trim(applicationName);
+            // TODO: verify that Applications has that app name
+            // APPLICATION_NAMES
+        }
     }
 }
