@@ -5,6 +5,7 @@
 #include <istream>      // std::getLine
 #include <stdio.h>
 #include <stdlib.h>
+#include "DisplayDimensions.h"
 using namespace std;
 
 namespace Utils {

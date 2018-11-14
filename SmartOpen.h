@@ -1,11 +1,15 @@
+#ifndef SMART_OPEN_H
+#define SMART_OPEN_H
 #include <string>
+#include <vector>
+#include <memory>
+#include "Subject.h"
+#include "Event.h"
 
-class SmartOpen {
+class SmartOpen: public Subject {
 private:
-    std::string name;
-    int position;
-
-    std::string 
+    struct SmartOpenImpl;
+    std::unique_ptr<SmartOpenImpl> smartOpenPimpl;
 
 public:
     static const int POSITION_LEFT;
@@ -15,4 +19,9 @@ public:
 
     SmartOpen();
     ~SmartOpen();
+
+    void run();
+    Event getLastEvent();
 };
+
+#endif
