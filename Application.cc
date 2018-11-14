@@ -11,6 +11,7 @@ class Application {
         static const int POSITION_LEFT = 1;
         static const int POSITION_MIDDLE = 2;
         static const int POSITION_RIGHT = 3;
+        static const int FULL_SCREEN = 4;
 
         Application(string name, int position) : name{name}, position{position} {}
 

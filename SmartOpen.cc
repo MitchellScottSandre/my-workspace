@@ -9,15 +9,15 @@ using namespace std;
 class SmartOpen {
 private:
     vector<string> APPLICATION_NAMES;
-    string desiredWorkspaceSetup;
+    string desiredSetup;
 
 public:
     SmartOpen() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
 
-    string getDesktopSetupInput() {
+    string getSetupInput() {
         cout << "Enter desired desktop(s) setup." << endl;
-        cout << "Format: DESK_1_APP_1 | DESK_1_APP_2 || DESK_2_APP_1 | DESK_2_APP_2 || ..." << endl;
-
+        cout << "Format: " << endl;
+        cout << "DESK_1_LEFT_APP | DESK_1_RIGHT_APP || DESK_2_MIDDLE_APP || <FULL_SCREEN_APP> || ..." << endl;
         string input;
         getline(cin, input);
 
@@ -43,8 +43,8 @@ public:
     }
 
     void run() {
-        this->desiredWorkspaceSetup = getDesktopSetupInput();
-        setupApplications(this->desiredWorkspaceSetup);
+        this->desiredSetup = getSetupInput();
+        setupApplications(this->desiredSetup);
     }
 
 };
