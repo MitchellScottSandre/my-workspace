@@ -52,10 +52,8 @@ class Application {
 
         void setup(DisplayDimensions displayDimensions) {
             open();
-            // Utils::delay(2);
             putInPosition(displayDimensions);
             putInPosition(displayDimensions);
-            // Utils::delay(2);
         }
         
         string getName() {

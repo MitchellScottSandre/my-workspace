@@ -8,20 +8,7 @@
 using namespace std;
 
 namespace Utils {
-    static vector<string> getApplicationNamesList() {
-        const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
-        const string applicationNamesText = Utils::getStdoutFromCommand(GET_APPLICATION_NAMES_COMMAND);
-        stringstream ss(applicationNamesText);
-        vector<string> namesList;
-        string tempName;
-
-        while (getline(ss, tempName, '\n')) {
-            namesList.emplace_back(tempName);
-        }
-
-        return namesList;
-    }
-
+    
     static vector<string> splitByCharDelimiter(string & str, char delim) {
         vector<string> data;
         stringstream ss(str);
@@ -76,5 +63,30 @@ namespace Utils {
     static void delay(int duration) {
         string command = "osascript -e 'delay " + to_string(duration) + "'";
         getStdoutFromCommand(command);
+    }
+
+    static vector<string> getApplicationNamesList() {
+        const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
+        const string applicationNamesText = Utils::getStdoutFromCommand(GET_APPLICATION_NAMES_COMMAND);
+        stringstream ss(applicationNamesText);
+        vector<string> namesList;
+        string tempName;
+
+        while (getline(ss, tempName, '\n')) {
+            namesList.emplace_back(tempName);
+        }
+
+        return namesList;
+    }
+
+    DisplayDimensions getDisplayDimensions() {
+        const string GET_DIMENSIONS_COMMAND = "osascript -e 'tell application \"Finder\"\n get bounds of window of desktop\nend tell'";
+        string dimensionsText = Utils::getStdoutFromCommand(GET_DIMENSIONS_COMMAND);
+        vector<string> dimensionValues = Utils::splitByCharDelimiter(dimensionsText, ',');
+
+        int width = stoi(dimensionValues.at(2));
+        int height = stoi(dimensionValues.at(3));
+
+        return DisplayDimensions(width, height);
     }
 }

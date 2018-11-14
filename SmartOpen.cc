@@ -7,55 +7,47 @@
 using namespace std;
 
 class SmartOpen {
+private:
     vector<string> APPLICATION_NAMES;
     string desiredWorkspaceSetup;
 
+public:
     SmartOpen() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
 
-    void run() {
+    string getDesktopSetupInput() {
+        cout << "Enter desired desktop(s) setup." << endl;
+        cout << "Format: DESK_1_APP_1 | DESK_1_APP_2 || DESK_2_APP_1 | DESK_2_APP_2 || ..." << endl;
+
+        string input;
+        getline(cin, input);
+
+        bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
         
+        if (!endsWithCorrectDelimiter) {
+            input += "||";
+        }
+
+        return input;
+    }
+
+    void setupApplications(const string desiredSetup) {
+        vector<Desktop> desktops = Desktop::getDesktopsFromInput(desiredSetup);
+        DisplayDimensions displayDimensions = Utils::getDisplayDimensions();
+        // Navigate all the way to the left
+        Desktop::switchDesktop(Desktop::DIRECTION_LEFT);
+
+        for (int i = 0; i < desktops.size(); i++ ) {
+            desktops.at(i).setupApplications(displayDimensions);
+            Desktop::switchDesktop(Desktop::DIRECTION_RIGHT);
+        }
+    }
+
+    void run() {
+        this->desiredWorkspaceSetup = getDesktopSetupInput();
+        setupApplications(this->desiredWorkspaceSetup);
     }
 
 };
-
-string getDesktopSetupInput() {
-    cout << "Enter desired desktop(s) setup." << endl;
-    cout << "Format: DESK_1_APP_1 | DESK_1_APP_2 || DESK_2_APP_1 | DESK_2_APP_2 || ..." << endl;
-
-    string input;
-    getline(cin, input);
-
-    bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
-    
-    if (!endsWithCorrectDelimiter) {
-        input += "||";
-    }
-
-    return input;
-}
-
-DisplayDimensions getDisplayDimensions() {
-    const string GET_DIMENSIONS_COMMAND = "osascript -e 'tell application \"Finder\"\n get bounds of window of desktop\nend tell'";
-    string dimensionsText = Utils::getStdoutFromCommand(GET_DIMENSIONS_COMMAND);
-    vector<string> dimensionValues = Utils::splitByCharDelimiter(dimensionsText, ',');
-
-    int width = stoi(dimensionValues.at(2));
-    int height = stoi(dimensionValues.at(3));
-
-    return DisplayDimensions(width, height);
-}
-
-void setupApplications(const string desiredSetup) {
-    vector<Desktop> desktops = Desktop::getDesktopsFromInput(desiredSetup);
-    DisplayDimensions displayDimensions = getDisplayDimensions();
-    // Navigate all the way to the left
-    Desktop::switchDesktop(Desktop::DIRECTION_LEFT);
-
-    for (int i = 0; i < desktops.size(); i++ ) {
-        desktops.at(i).setupApplications(displayDimensions);
-        Desktop::switchDesktop(Desktop::DIRECTION_RIGHT);
-    }
-}
 
 /**********************************
 ************** Main  **************
@@ -69,10 +61,11 @@ int main() {
     // const string username = Utils::getStdoutFromCommand("whoami");
     // std::cout << username << std::endl;
     // Utils::getStdoutFromCommand("osascript -e 'tell application \"System Events\" to key code 124 using control down'");
+    // SmartOpen * program = new SmartOpen();
     SmartOpen program;
     program.run();
-    const vector<string> APPLICATION_NAMES = getApplicationNamesList();
-    const string desiredSetup = getDesktopSetupInput();
-    setupApplications(desiredSetup);
+    // const vector<string> APPLICATION_NAMES = getApplicationNamesList();
+    // const string desiredSetup = getDesktopSetupInput();
+    // setupApplications(desiredSetup);
     return 0;
 }
