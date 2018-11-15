@@ -11,8 +11,8 @@ class Controller {
     struct ControllerImpl;
     std::unique_ptr<ControllerImpl> controllerPimpl;
 
-    bool validDesktopSetupInputDelimiters(const std::string input);
-    bool validDesktopSetupInputNames(const std::string input);
+    // bool validDesktopSetupInputDelimiters(const std::string input);
+    bool validDesktopSetupInput(const std::string input);
     // bool validApplicationName(const std::string appName);
 public:
     Controller(std::shared_ptr<SmartOpen> m);

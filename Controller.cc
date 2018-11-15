@@ -3,6 +3,8 @@
 #include "View.h"
 #include "StringUtils.h"
 #include "ScriptService.h"
+#include "Desktop.h"
+#include "Application.h"
 using namespace std;
 
 struct Controller::ControllerImpl {
@@ -22,10 +24,10 @@ Controller::~Controller() {}
  ***************************************/
 
 void Controller::receivedDesktopSetupInput(const string input) {
-    bool validDelimiters = validDesktopSetupInputDelimiters(input);
-    bool validAppNames = validDesktopSetupInputNames(input);
+    // bool validDelimiters = validDesktopSetupInputDelimiters(input);
+    bool validAppNames = validDesktopSetupInput(input);
 
-    if (validDelimiters && validAppNames) {
+    if (validAppNames) {
         // TODO: call mode
     } else {
         this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_DESKTOP_SETUP_INPUT));
@@ -36,44 +38,58 @@ void Controller::receivedDesktopSetupInput(const string input) {
  *            Private Methods          *
  ***************************************/
 
-bool Controller::validDesktopSetupInputDelimiters(const string input) {
-    // TODO: 
-    return true;
-}
+// bool Controller::validDesktopSetupInputDelimiters(const string input) {
+//     // TODO: delete this?
+//     return true;
+// }
 
-bool Controller::validDesktopSetupInputNames(const string input) {
+bool Controller::validDesktopSetupInput(const string input) {
     const set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
 
     // Parse input tokens into desktop tokens
     // TODO: generate Desktop objects here. Set them in the model if validation is successful
-    vector<string> desktops;
-    StringUtils::split(desktops, input, View::DESKTOP_DELIMITER);
+    vector<string> desktopTokens;
+    vector<Desktop> desktops;
+    StringUtils::split(desktopTokens, input, View::DESKTOP_DELIMITER);
 
-    for (string desktopText : desktops) {
-        StringUtils::trim(desktopText);
+    for (string desktopToken : desktopTokens) {
+        StringUtils::trim(desktopToken);
 
         // Parse desktop tokens into applicationName tokens
-        vector<string> applications;
-        StringUtils::split(applications, desktopText, View::APPLICATION_DELIMITER);
+        vector<string> applicationTokens;
+        vector<shared_ptr<Application>> applications;
+        StringUtils::split(applicationTokens, desktopToken, View::APPLICATION_DELIMITER);
 
-        // Check if applicationName exists 
-        for (string applicationName : applications) {
-            StringUtils::trim(applicationName);
+        bool appIsFullScreen = false;
+
+        // Check if applicationName exists in Applications Folder
+        for (int i = 0; i < applicationTokens.size(); i++) {
+            string applicationToken = applicationTokens.at(i);
+            StringUtils::trim(applicationToken);
+
+            if (applicationToken.at(0) == View::FULL_SCREEN_LEFT_DELIMITER && applicationToken.at(applicationToken.length() - 1) == View::FULL_SCREEN_RIGHT_DELIMITER) {
+                if (i != 0) {
+                    // TODO: throw can't have a full screen app and another one
+                }
+                appIsFullScreen = true;
+                StringUtils::removeFullScreenDelimiters(applicationToken);
+            }
 
             bool appNameExists = false;
             for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
                 string s = *it;
-                if (StringUtils::str_tolower(s) == StringUtils::str_tolower(applicationName)) {
+                if (StringUtils::str_tolower(s) == StringUtils::str_tolower(applicationToken)) {
                     appNameExists = true;
                     break;
                 }
             }
 
             if (!appNameExists) {
-                Event event = Event(Event::EventType::ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationName);
+                Event event = Event(Event::EventType::ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationToken);
                 this->controllerPimpl->model->emitEvent(event);
                 return false;
-            } 
+            }
+
         }
     }
 

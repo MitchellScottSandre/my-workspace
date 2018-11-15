@@ -16,6 +16,8 @@ struct View::ViewImpl {
 
 const string View::DESKTOP_DELIMITER = "||";
 const string View::APPLICATION_DELIMITER = "|";
+const char View::FULL_SCREEN_LEFT_DELIMITER = '<';
+const char View::FULL_SCREEN_RIGHT_DELIMITER = '>';
 
 View::View(shared_ptr<Controller> c, shared_ptr<SmartOpen> m) : viewPimpl{make_unique<ViewImpl>(c, m)} {}
 

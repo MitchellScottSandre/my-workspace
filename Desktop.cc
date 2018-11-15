@@ -72,3 +72,8 @@ void Desktop::setupDesktop() {
     //     string command = "osascript -e 'tell application \"System Events\" to key code " + directionKeyCode + " using control down'";
     //     Utils::getStdoutFromCommand(command);
     // }
+
+// bool Desktop::parseDesktopTokensFromInput(vector<string> desktopTokens, string input) {
+
+//     return true;
+// }

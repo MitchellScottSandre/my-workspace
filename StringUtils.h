@@ -42,6 +42,11 @@ public:
         }
     }
 
+    static void removeFullScreenDelimiters(std::string & s) {
+        s = s.substr(1, s.length() - 1);
+        s = s.substr(0, s.length() - 1);
+    }
+
     // Taken from https://en.cppreference.com/w/cpp/string/byte/tolower
     static std::string str_tolower(std::string s) {
         std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c){ return std::tolower(c); });

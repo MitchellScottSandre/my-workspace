@@ -20,6 +20,7 @@ public:
     ~Desktop();
 
     void setupDesktop();
+    // static bool parseDesktopTokensFromInput(std::vector<std::string> desktopTokens, std::string input);
     // static std::vector<Desktop> getDesktopsFromInput(std::string input);
 };
 
