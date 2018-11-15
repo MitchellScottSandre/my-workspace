@@ -3,11 +3,11 @@
 #include <istream>      // std::getLine
 #include <stdio.h>
 #include <stdlib.h> // TODO: remove unused ones
-#include "ScriptRunner.h"
+#include "ScriptService.h"
 using namespace std;
 
 // This function taken from https://www.jeremymorgan.com/tutorials/c-programming/how-to-capture-the-output-of-a-linux-command-in-c/
-string ScriptRunner::executeCommand(string cmd) {
+string ScriptService::executeCommand(string cmd) {
     string data;
     FILE * stream;
     const int max_buffer = 256;
@@ -26,17 +26,23 @@ string ScriptRunner::executeCommand(string cmd) {
     return data;
 }
 
-// TODO: make this a Set
-vector<string> ScriptRunner::getApplicationNamesList() {
+
+set<string> ScriptService::getApplicationNames() {
+    // TODO: find all files in Applications (and in folders inside of applications)
+    // const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -exec find . -type f -name '*.app' -printf '%TY-%Tm-%Td %TT %p\n' {} \\;";
     const string GET_APPLICATION_NAMES_COMMAND = "find / -type d -name \"Applications\" -maxdepth 1 -exec ls {} \\;";
     const string applicationNamesText = executeCommand(GET_APPLICATION_NAMES_COMMAND);
     stringstream ss(applicationNamesText);
-    vector<string> namesList;
+    set<string> namesSet;
     string tempName;
 
     while (getline(ss, tempName, '\n')) {
-        namesList.emplace_back(tempName);
+        namesSet.insert(tempName);
+        cout << "--> " << tempName << endl;
+        //TODO: remove the .app
     }
 
-    return namesList;
+    return namesSet;
 }
+
+// string ScriptService::fot

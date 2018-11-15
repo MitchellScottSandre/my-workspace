@@ -3,7 +3,7 @@
 #include "View.h"
 #include "StringSplitter.h"
 #include "StringTrimmer.h"
-#include "ScriptRunner.h"
+#include "ScriptService.h"
 using namespace std;
 
 struct Controller::ControllerImpl {
@@ -41,7 +41,7 @@ void Controller::receivedDesktopSetupInput(string input) {
 
 bool Controller::validDesktopSetupInputNames(string input) {
     vector<string> desktops;
-    vector<string> APPLICATION_NAMES = ScriptRunner::getApplicationNamesList();
+    set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
     StringSplitter::split(desktops, input, View::DESKTOP_DELIMITER);
 
     for (string desktopText : desktops) {
@@ -53,6 +53,11 @@ bool Controller::validDesktopSetupInputNames(string input) {
             StringTrimmer::trim(applicationName);
             // TODO: verify that Applications has that app name
             // APPLICATION_NAMES
+            if (APPLICATION_NAMES.count(applicationName) == 0) {
+                cout << "don't contain " << applicationName << endl;
+            } else {
+                cout << "you contain " << applicationName << endl;
+            }
         }
     }
 }

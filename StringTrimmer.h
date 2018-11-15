@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+//TODO: refactor this into one StringUitl class
 class StringTrimmer {
 public:
     static void trim(std::string & x) {

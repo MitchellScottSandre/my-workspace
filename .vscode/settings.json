@@ -16,6 +16,7 @@
         "typeinfo": "cpp",
         "algorithm": "cpp",
         "ostream": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "set": "cpp"
     }
 }
