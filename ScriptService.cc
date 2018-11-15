@@ -33,10 +33,10 @@ set<string> ScriptService::getApplicationNames() {
     const string applicationNamesText = executeCommand(GET_APPLICATION_NAMES_COMMAND);
     stringstream ss(applicationNamesText);
     set<string> namesSet;
-    string tempName;
+    string appName;
 
-    while (getline(ss, tempName, '\n')) {
-        namesSet.insert(ScriptService::formatAppName(tempName));
+    while (getline(ss, appName, '\n')) {
+        namesSet.insert(ScriptService::formatAppName(appName));
     }
 
     return namesSet;
@@ -50,8 +50,8 @@ void ScriptService::delay(int duration) {
 string ScriptService::formatAppName(string appName) {
     const string fileExt = ".app";
     if (appName.substr(appName.length() - fileExt.length(), fileExt.length()) == fileExt) {
-        appName = appName.substr(0, appName.length() - fileExt.length());
+        return appName.substr(0, appName.length() - fileExt.length());
     }
 
-    return StringUtils::str_tolower(appName);;
+    return appName;
 }

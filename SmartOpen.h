@@ -23,6 +23,7 @@ public:
     void run();
     void emitEvent(Event e);
     Event getLastEvent();
+    void setupWorkspace();
 };
 
 #endif

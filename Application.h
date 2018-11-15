@@ -20,6 +20,7 @@ public:
     ~Application();
 
     void setup();
+    // static string parseApplication
 };
 
 #endif

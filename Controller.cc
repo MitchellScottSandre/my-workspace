@@ -21,23 +21,31 @@ Controller::~Controller() {}
  *            Public Methods           *
  ***************************************/
 
-void Controller::receivedDesktopSetupInput(string input) {
-    // TODO: validDesktopSetupInputDelimiters(input)
-    bool validApplicationNames = validDesktopSetupInputNames(input);
+void Controller::receivedDesktopSetupInput(const string input) {
+    bool validDelimiters = validDesktopSetupInputDelimiters(input);
+    bool validAppNames = validDesktopSetupInputNames(input);
+
+    if (validDelimiters && validAppNames) {
+        // TODO: call mode
+    } else {
+        this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_DESKTOP_SETUP_INPUT));
+    }
 }
 
 /***************************************
  *            Private Methods          *
  ***************************************/
 
-bool Controller::validDesktopSetupInputDelimiters(string input) {
+bool Controller::validDesktopSetupInputDelimiters(const string input) {
+    // TODO: 
     return true;
 }
 
-bool Controller::validDesktopSetupInputNames(string input) {
+bool Controller::validDesktopSetupInputNames(const string input) {
     const set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
 
     // Parse input tokens into desktop tokens
+    // TODO: generate Desktop objects here. Set them in the model if validation is successful
     vector<string> desktops;
     StringUtils::split(desktops, input, View::DESKTOP_DELIMITER);
 
@@ -48,11 +56,21 @@ bool Controller::validDesktopSetupInputNames(string input) {
         vector<string> applications;
         StringUtils::split(applications, desktopText, View::APPLICATION_DELIMITER);
 
-        // Check if application exists
+        // Check if applicationName exists 
         for (string applicationName : applications) {
             StringUtils::trim(applicationName);
-            if (APPLICATION_NAMES.count(StringUtils::str_tolower(applicationName)) == 0) {
-                Event event = Event(Event::EventType::INPUT_ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationName);
+
+            bool appNameExists = false;
+            for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
+                string s = *it;
+                if (StringUtils::str_tolower(s) == StringUtils::str_tolower(applicationName)) {
+                    appNameExists = true;
+                    break;
+                }
+            }
+
+            if (!appNameExists) {
+                Event event = Event(Event::EventType::ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationName);
                 this->controllerPimpl->model->emitEvent(event);
                 return false;
             } 

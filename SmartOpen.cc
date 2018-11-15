@@ -7,12 +7,9 @@
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
-    vector<string> APPLICATION_NAMES;
-    string desiredSetup;
     Event currentEvent;
 
-    // SmartOpenImpl() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
-    SmartOpenImpl() : currentEvent{Event(Event::EventType::NULL_EVENT)} {}
+    SmartOpenImpl() : currentEvent{Event()} {}
 };
 
 SmartOpen::SmartOpen() : smartOpenPimpl{make_unique<SmartOpenImpl>()} {}

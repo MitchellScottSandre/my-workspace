@@ -31,7 +31,7 @@ void View::getNotified() {
         case Event::EventType::GET_DESKTOP_SETUP_INPUT:
             getDesktopSetupInput();
             break;
-        case Event::EventType::INPUT_ERROR:
+        case Event::EventType::ERROR:
             displayError(e.error, e.data);
             break;
         default:
