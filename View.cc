@@ -24,15 +24,18 @@ View::~View() {}
 void View::getNotified() {
     const Event e = viewPimpl->model->getLastEvent();
 
-    switch (e.eventType) {
+    switch (e.type) {
         case Event::EventType::DISPLAY_WELCOME:
             displayWelcome();
             break;
         case Event::EventType::GET_DESKTOP_SETUP_INPUT:
             getDesktopSetupInput();
             break;
+        case Event::EventType::INPUT_ERROR:
+            displayError(e.error, e.data);
+            break;
         default:
-            throw;
+            return;
     }
 }
 
@@ -53,4 +56,17 @@ void View::getDesktopSetupInput() {
     getline(cin, input);
 
     viewPimpl->controller->receivedDesktopSetupInput(input);
+}
+
+void View::displayError(Event::EventError error, string errorMessage) {
+    string output = "";
+    switch(error) {
+        case Event::EventError::BAD_APPLICATION_NAME:
+            output = "Invalid Application Name: " + errorMessage;
+            break;
+        default:
+            return;
+    }
+
+    cerr << "Error: " + output << endl;
 }

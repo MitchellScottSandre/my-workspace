@@ -5,10 +5,10 @@
 
 class ScriptService {
 private:
-    // std::string formatAppName(std::string name);
+    static std::string formatAppName(std::string appName);
 public:
     static std::string executeCommand(std::string cmd);
-
     static std::set<std::string> getApplicationNames();
+    static void delay(int duration);
 };
 #endif

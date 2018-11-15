@@ -1,8 +1,7 @@
 #include "Controller.h"
 #include "SmartOpen.h"
 #include "View.h"
-#include "StringSplitter.h"
-#include "StringTrimmer.h"
+#include "StringUtils.h"
 #include "ScriptService.h"
 using namespace std;
 
@@ -23,7 +22,7 @@ Controller::~Controller() {}
  ***************************************/
 
 void Controller::receivedDesktopSetupInput(string input) {
-    // fixDesktopSetupInputDelimiters(input);
+    // TODO: validDesktopSetupInputDelimiters(input)
     bool validApplicationNames = validDesktopSetupInputNames(input);
 }
 
@@ -31,33 +30,34 @@ void Controller::receivedDesktopSetupInput(string input) {
  *            Private Methods          *
  ***************************************/
 
-// void Controller::fixDesktopSetupInputDelimiters(string & input) {
-//     bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == View::DESKTOP_DELIMITER;
-    
-//     if (!endsWithCorrectDelimiter) {
-//         input += "||";
-//     }
-// }
+bool Controller::validDesktopSetupInputDelimiters(string input) {
+    return true;
+}
 
 bool Controller::validDesktopSetupInputNames(string input) {
+    const set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
+
+    // Parse input tokens into desktop tokens
     vector<string> desktops;
-    set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
-    StringSplitter::split(desktops, input, View::DESKTOP_DELIMITER);
+    StringUtils::split(desktops, input, View::DESKTOP_DELIMITER);
 
     for (string desktopText : desktops) {
-        StringTrimmer::trim(desktopText);
-        vector<string> applications;
-        StringSplitter::split(applications, desktopText, View::APPLICATION_DELIMITER);
+        StringUtils::trim(desktopText);
 
+        // Parse desktop tokens into applicationName tokens
+        vector<string> applications;
+        StringUtils::split(applications, desktopText, View::APPLICATION_DELIMITER);
+
+        // Check if application exists
         for (string applicationName : applications) {
-            StringTrimmer::trim(applicationName);
-            // TODO: verify that Applications has that app name
-            // APPLICATION_NAMES
-            if (APPLICATION_NAMES.count(applicationName) == 0) {
-                cout << "don't contain " << applicationName << endl;
-            } else {
-                cout << "you contain " << applicationName << endl;
-            }
+            StringUtils::trim(applicationName);
+            if (APPLICATION_NAMES.count(StringUtils::str_tolower(applicationName)) == 0) {
+                Event event = Event(Event::EventType::INPUT_ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationName);
+                this->controllerPimpl->model->emitEvent(event);
+                return false;
+            } 
         }
     }
+
+    return true;
 }
