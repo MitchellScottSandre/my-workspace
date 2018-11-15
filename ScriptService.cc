@@ -5,6 +5,7 @@
 #include <stdlib.h> // TODO: remove unused ones
 #include "ScriptService.h"
 #include "StringUtils.h"
+#include "DisplayDimensions.h"
 using namespace std;
 
 // This function taken from https://www.jeremymorgan.com/tutorials/c-programming/how-to-capture-the-output-of-a-linux-command-in-c/
@@ -26,7 +27,6 @@ string ScriptService::executeCommand(string cmd) {
     }
     return data;
 }
-
 
 set<string> ScriptService::getApplicationNames() {
     const string GET_APPLICATION_NAMES_COMMAND = "cd //Applications && find . -name '*.app' -maxdepth 2 -exec basename {} \\; | sort";
@@ -54,4 +54,16 @@ string ScriptService::formatAppName(string appName) {
     }
 
     return appName;
+}
+
+DisplayDimensions ScriptService::getDisplayDimensions() {
+    const string GET_DIMENSIONS_COMMAND = "osascript -e 'tell application \"Finder\"\n get bounds of window of desktop\nend tell'";
+    string dimensionsText = ScriptService::executeCommand(GET_DIMENSIONS_COMMAND);
+    vector<string> dimensionValues;
+    StringUtils::split(dimensionValues, dimensionsText, ',');
+
+    int width = stoi(dimensionValues.at(2));
+    int height = stoi(dimensionValues.at(3));
+
+    return DisplayDimensions(width, height);
 }

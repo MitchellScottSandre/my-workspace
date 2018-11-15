@@ -21,6 +21,7 @@ public:
     ~SmartOpen();
 
     void run();
+    void emitError(Event::EventError e, std::string errorMessage = "");
     void emitEvent(Event e);
     Event getLastEvent();
     void setupWorkspace();

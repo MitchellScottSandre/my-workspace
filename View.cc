@@ -66,6 +66,12 @@ void View::displayError(Event::EventError error, string errorMessage) {
         case Event::EventError::BAD_APPLICATION_NAME:
             output = "Invalid Application Name: " + errorMessage;
             break;
+        case Event::EventError::TOO_MANY_APPLICATIONS:
+            output = "Can't have more than 2 applications per desktop";
+            break;
+        case Event::EventError::INVALID_FULLSCREEN:
+            output = "Can't have another application open with " + errorMessage + " in full screen";
+            break;
         default:
             return;
     }

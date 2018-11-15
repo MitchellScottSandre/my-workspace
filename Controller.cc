@@ -60,19 +60,26 @@ bool Controller::validDesktopSetupInput(const string input) {
         vector<shared_ptr<Application>> applications;
         StringUtils::split(applicationTokens, desktopToken, View::APPLICATION_DELIMITER);
 
+        if (applicationTokens.size() > 2) {
+            this->controllerPimpl->model->emitError(Event::EventError::TOO_MANY_APPLICATIONS);
+            return false;
+        }
+
         bool appIsFullScreen = false;
 
         // Check if applicationName exists in Applications Folder
         for (int i = 0; i < applicationTokens.size(); i++) {
+
             string applicationToken = applicationTokens.at(i);
             StringUtils::trim(applicationToken);
 
             if (applicationToken.at(0) == View::FULL_SCREEN_LEFT_DELIMITER && applicationToken.at(applicationToken.length() - 1) == View::FULL_SCREEN_RIGHT_DELIMITER) {
-                if (i != 0) {
-                    // TODO: throw can't have a full screen app and another one
-                }
                 appIsFullScreen = true;
                 StringUtils::removeFullScreenDelimiters(applicationToken);
+                if (i != 0) {
+                    this->controllerPimpl->model->emitError(Event::EventError::INVALID_FULLSCREEN, applicationToken);
+                    return false;
+                }
             }
 
             bool appNameExists = false;
@@ -85,11 +92,14 @@ bool Controller::validDesktopSetupInput(const string input) {
             }
 
             if (!appNameExists) {
-                Event event = Event(Event::EventType::ERROR, Event::EventError::BAD_APPLICATION_NAME, applicationToken);
-                this->controllerPimpl->model->emitEvent(event);
+                this->controllerPimpl->model->emitError(Event::EventError::BAD_APPLICATION_NAME, applicationToken);
                 return false;
             }
 
+            if (applicationTokens.size() == 1) {
+                // TODO: create desktop using displaydimension
+                // desktops.emplace_back(Desktop(make_shared<Application>(applicationToken, Application::ApplicationPosition::MIDDLE)));
+            }
         }
     }
 

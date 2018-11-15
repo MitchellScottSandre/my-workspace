@@ -26,6 +26,10 @@ void SmartOpen::emitEvent(Event e) {
     this->notifyObservers();
 }
 
+void SmartOpen::emitError(Event::EventError e, string errorMessage) {
+    emitEvent(Event(Event::EventType::ERROR, e, errorMessage));
+}
+
 Event SmartOpen::getLastEvent() {
     return this->smartOpenPimpl->currentEvent;
 }

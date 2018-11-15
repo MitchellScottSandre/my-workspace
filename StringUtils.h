@@ -1,11 +1,21 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
+#include <sstream>      // std::stringstream
+#include <istream>      // std::getLine
 #include <vector>
 #include <string>
 
 //TODO: refactor this into one StringUitl class
 class StringUtils {
 public:
+    static void split(std::vector<std::string> & data, std::string text, char delimiter) {
+        stringstream ss(text);
+        string token;
+        while (getline(ss, token, delimiter)) {
+            data.emplace_back(token);
+        }
+    }
+    
     static void split(std::vector<std::string> & data, std::string text, std::string delimiter) {
         int delimiterLength = delimiter.length();
         size_t index = 0;

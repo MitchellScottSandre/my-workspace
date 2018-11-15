@@ -5,7 +5,7 @@
 
 struct Event {
     enum EventType { NULL_EVENT, DISPLAY_WELCOME, GET_DESKTOP_SETUP_INPUT, ERROR };
-    enum EventError { NULL_ERROR, BAD_APPLICATION_NAME };
+    enum EventError { NULL_ERROR, BAD_APPLICATION_NAME, TOO_MANY_APPLICATIONS, INVALID_FULLSCREEN };
 
     EventType type;
     EventError error;
