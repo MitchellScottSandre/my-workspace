@@ -13,14 +13,12 @@ private:
 
     void open();
     void putInPosition();
-
 public:
     enum ApplicationPosition { LEFT, MIDDLE, RIGHT, FULL_SCREEN };
     Application(std::string appName, ApplicationPosition position, DisplayDimensions displayDimensions);
     ~Application();
 
-    void setup();
-    // static string parseApplications
+    void setupApplication();
 };
 
 #endif

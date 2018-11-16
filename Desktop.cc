@@ -4,7 +4,6 @@
 using namespace std;
 
 struct Desktop::DesktopImpl {
-    //TODO: make this unique??
     shared_ptr<Application> app1;
     shared_ptr<Application> app2;
 
@@ -18,14 +17,16 @@ Desktop::Desktop(std::shared_ptr<Application> leftApp, std::shared_ptr<Applicati
 Desktop::Desktop(std::shared_ptr<Application> centreApp) : 
     desktopPimpl{make_unique<DesktopImpl>(centreApp, nullptr)} {}
 
+Desktop::~Desktop() {}
+
 void Desktop::setupDesktop() {
-    // if (app1 != nullptr) {
-    //     app1->setup(displayDimensions);
-    // }
+    if (this->desktopPimpl->app1 != nullptr) {
+        this->desktopPimpl->app1->setupApplication();
+    }
     
-    // if (app2 != nullptr) {
-    //     app2->setup(displayDimensions);
-    // }
+    if (this->desktopPimpl->app2 != nullptr) {
+        this->desktopPimpl->app2->setupApplication();
+    }
 }
 
     // static vector<Desktop> getDesktopsFromInput(string input) {

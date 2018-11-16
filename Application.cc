@@ -1,6 +1,7 @@
+#include <iostream>
 #include "DisplayDimensions.h"
 #include "Application.h"
-// #include "Utils.cc"
+#include "ScriptService.h"
 using namespace std;
 
 struct Application::ApplicationImpl {
@@ -18,71 +19,42 @@ Application::Application(string appName, ApplicationPosition position, DisplayDi
 Application::~Application() {}
 
 void Application::open() {
-
+    string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
+    ScriptService::executeCommand(command);
 }
 
 void Application::putInPosition() {
+    string loation = "";
+    string size = "";
+    string halfWidth = to_string(this->applicationPimpl->displayDimensions.getWidth() / 2);
+    string height = to_string(this->applicationPimpl->displayDimensions.getHeight());
+    string width = to_string(this->applicationPimpl->displayDimensions.getWidth());
 
+    switch (this->applicationPimpl->position) {
+        case Application::ApplicationPosition::LEFT:
+            loation = "{0, 0}";
+            size = "{" + halfWidth + ", " + height + "}";
+            break;
+        case Application::ApplicationPosition::MIDDLE:
+            loation = "{0, 0}";
+            size = "{" + width + ", " + height + "}";
+            break;
+        case Application::ApplicationPosition::RIGHT:
+            loation = "{" + halfWidth + ", 0}";
+            size = "{" + halfWidth + ", " + height + "}";
+            break;
+    }
+
+    string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + loation + "'";
+    string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + size + "'";
+
+    cout << command1 << endl;
+    cout << command2 << endl;
+    ScriptService::executeCommand(command1);
+    ScriptService::executeCommand(command2);
 }
 
-void Application::setup() {
-
+void Application::setupApplication() {
+    open();
+    putInPosition();
 }
-
-// class Application {
-    // private:
-    //     string name;
-    //     int position;
-    // public:
-    //     static const int POSITION_LEFT = 1;
-    //     static const int POSITION_MIDDLE = 2;
-    //     static const int POSITION_RIGHT = 3;
-    //     static const int FULL_SCREEN = 4;
-
-    //     Application(string name, int position) : name{name}, position{position} {}
-
-    //     void open() {
-    //         string command = "osascript -e 'tell application \"" + this->getName() + "\" \nlaunch \nend tell'";
-    //         Utils::getStdoutFromCommand(command);
-    //     }
-
-    //     void putInPosition(DisplayDimensions displayDimensions) {
-    //         string loation = "";
-    //         string size = "";
-    //         string halfWidth = to_string(displayDimensions.getWidth() / 2);
-    //         string height = to_string(displayDimensions.getHeight());
-    //         string width = to_string(displayDimensions.getWidth());
-
-    //         switch (position) {
-    //             case POSITION_LEFT:
-    //                 loation = "{0, 0}";
-    //                 size = "{" + halfWidth + ", " + height + "}";
-    //                 break;
-    //             case POSITION_MIDDLE:
-    //                 loation = "{0, 0}";
-    //                 size = "{" + width + ", " + height + "}";
-    //                 break;
-    //             case POSITION_RIGHT:
-    //                 loation = "{" + halfWidth + ", 0}";
-    //                 size = "{" + halfWidth + ", " + height + "}";
-    //                 break;
-    //         }
-
-    //         string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->getName() + "\" to " + loation + "'";
-    //         string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->getName() + "\" to " + size + "'";
-
-    //         cout << command1 << endl;
-    //         cout << command2 << endl;
-    //         Utils::getStdoutFromCommand(command1);
-    //         Utils::getStdoutFromCommand(command2);
-    //     }
-
-    //     void setup(DisplayDimensions displayDimensions) {
-    //         open();
-    //         putInPosition(displayDimensions);
-    //         putInPosition(displayDimensions);
-    //     }
-        
-    //     string getName() {
-    //         return this->name;
-    //     }

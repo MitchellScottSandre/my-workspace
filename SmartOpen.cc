@@ -3,11 +3,11 @@
 #include <istream>      // std::getLine
 #include "Desktop.h"
 #include "SmartOpen.h"
-// #include "Utils.cc"
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
     Event currentEvent;
+    vector<shared_ptr<Desktop>> desktops;
 
     SmartOpenImpl() : currentEvent{Event()} {}
 };
@@ -33,45 +33,18 @@ void SmartOpen::emitError(Event::EventError e, string errorMessage) {
 Event SmartOpen::getLastEvent() {
     return this->smartOpenPimpl->currentEvent;
 }
+
+void SmartOpen::setDesktops(vector<shared_ptr<Desktop>> desktops) {
+    this->smartOpenPimpl->desktops = desktops;
+}
+
+void SmartOpen::setupWorkspace() {
+    for (int i = 0; i < this->smartOpenPimpl->desktops.size(); i++) {
+        shared_ptr<Desktop> desktop = this->smartOpenPimpl->desktops.at(i);
+        desktop->setupDesktop();
+    }
+}
    
-
-//     SmartOpen() : APPLICATION_NAMES{Utils::getApplicationNamesList()} {}
-
-//     string getSetupInput() {
-        // cout << "Enter desired desktop(s) setup." << endl;
-        // cout << "Format: " << endl;
-        // cout << "DESK_1_LEFT_APP | DESK_1_RIGHT_APP || DESK_2_MIDDLE_APP || <FULL_SCREEN_APP> || ..." << endl;
-        // string input;
-        // getline(cin, input);
-
-        // bool endsWithCorrectDelimiter = input.substr(input.length() - 2, 2) == "||";
-        
-        // if (!endsWithCorrectDelimiter) {
-        //     input += "||";
-        // }
-
-        // return input;
-//     }
-
-//     void setupApplications(const string desiredSetup) {
-//         vector<Desktop> desktops = Desktop::getDesktopsFromInput(desiredSetup);
-//         DisplayDimensions displayDimensions = Utils::getDisplayDimensions();
-//         // Navigate all the way to the left
-//         Desktop::switchDesktop(Desktop::DIRECTION_LEFT);
-
-//         for (int i = 0; i < desktops.size(); i++ ) {
-//             desktops.at(i).setupApplications(displayDimensions);
-//             Desktop::switchDesktop(Desktop::DIRECTION_RIGHT);
-//         }
-//     }
-
-//     void run() {
-//         this->desiredSetup = getSetupInput();
-//         setupApplications(this->desiredSetup);
-//     }
-
-// };
-
 /**********************************
 ************** Main  **************
 **********************************/

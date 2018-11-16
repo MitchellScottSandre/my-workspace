@@ -3,8 +3,11 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <vector>
 #include "Subject.h"
 #include "Event.h"
+
+class Desktop;
 
 class SmartOpen: public Subject {
 private:
@@ -25,6 +28,7 @@ public:
     void emitEvent(Event e);
     Event getLastEvent();
     void setupWorkspace();
+    void setDesktops(std::vector<std::shared_ptr<Desktop>> desktops);
 };
 
 #endif

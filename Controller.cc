@@ -26,10 +26,10 @@ Controller::~Controller() {}
 
 void Controller::receivedDesktopSetupInput(const string input) {
     // bool validDelimiters = validDesktopSetupInputDelimiters(input);
-    bool validAppNames = validDesktopSetupInput(input);
+    bool validDesktopSetup = validDesktopSetupInput(input);
 
-    if (validAppNames) {
-        // TODO: call mode
+    if (validDesktopSetup) {
+        this->controllerPimpl->model->setupWorkspace();
     } else {
         this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_DESKTOP_SETUP_INPUT));
     }
@@ -46,7 +46,7 @@ bool Controller::validDesktopSetupInput(const string input) {
 
     // Parse input tokens into desktop tokens
     vector<string> desktopTokens;
-    vector<Desktop> desktops;
+    vector<shared_ptr<Desktop>> desktops;
     StringUtils::split(desktopTokens, input, View::DESKTOP_DELIMITER);
 
     for (string desktopToken : desktopTokens) {
@@ -94,18 +94,29 @@ bool Controller::validDesktopSetupInput(const string input) {
                 return false;
             }
 
+            shared_ptr<Application> application;
+
             if (applicationTokens.size() == 1) {
                 Application::ApplicationPosition position = appIsFullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
-                desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, position, displayDimensions)));
+                application = make_shared<Application>(systemApplicationName, position, displayDimensions);
             } else {
-                // if (i == 0) {
-                //     desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, Application::ApplicationPosition::LEFT), displayDimensions));
-                // } else {
-                //     desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, Application::ApplicationPosition::RIGHT), displayDimensions));
-                // }
+                if (i == 0) {
+                    application = make_shared<Application>(systemApplicationName, Application::ApplicationPosition::LEFT, displayDimensions);
+                } else {
+                    application = make_shared<Application>(systemApplicationName, Application::ApplicationPosition::RIGHT, displayDimensions);
+                }
             }
+
+            applications.emplace_back(application);
+        }
+
+        if (applications.size() == 1) {
+            desktops.emplace_back(make_shared<Desktop>(applications.at(0)));
+        } else if (applications.size() == 2) {
+              desktops.emplace_back(make_shared<Desktop>(applications.at(0), applications.at(1)));
         }
     }
 
+    controllerPimpl->model->setDesktops(desktops);
     return true;
 }
