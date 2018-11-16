@@ -3,6 +3,7 @@
 #include <istream>      // std::getLine
 #include "Desktop.h"
 #include "SmartOpen.h"
+#include "ScriptService.h"
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
@@ -42,6 +43,7 @@ void SmartOpen::setupWorkspace() {
     for (int i = 0; i < this->smartOpenPimpl->desktops.size(); i++) {
         shared_ptr<Desktop> desktop = this->smartOpenPimpl->desktops.at(i);
         desktop->setupDesktop();
+        ScriptService::
     }
 }
    

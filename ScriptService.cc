@@ -67,3 +67,15 @@ DisplayDimensions ScriptService::getDisplayDimensions() {
 
     return DisplayDimensions(width, height);
 }
+
+void ScriptService::switchDesktops(DesktopDirection direction) {
+    string directionKeyCode = "";
+    if (direction == DesktopDirection::LEFT) {
+        directionKeyCode = "123";
+    } else if (direction == DesktopDirection::RIGHT) {
+        directionKeyCode = "124";
+    }
+
+    string command = "osascript -e 'tell application \"System Events\" to key code " + directionKeyCode + " using control down'";
+    ScriptService::executeCommand(command);
+}
