@@ -7,17 +7,16 @@ struct Desktop::DesktopImpl {
     //TODO: make this unique??
     shared_ptr<Application> app1;
     shared_ptr<Application> app2;
-    DisplayDimensions displayDimensions;
 
-    DesktopImpl(std::shared_ptr<Application> leftApp, std::shared_ptr<Application> rightApp, DisplayDimensions displayDimensions) :
-        app1{leftApp}, app2{rightApp}, displayDimensions{displayDimensions} {}
+    DesktopImpl(std::shared_ptr<Application> leftApp, std::shared_ptr<Application> rightApp) :
+        app1{leftApp}, app2{rightApp} {}
 };
 
-Desktop::Desktop(std::shared_ptr<Application> leftApp, std::shared_ptr<Application> rightApp, DisplayDimensions displayDimensions) : 
-    desktopPimpl{make_unique<DesktopImpl>(leftApp, rightApp, displayDimensions)} {}
+Desktop::Desktop(std::shared_ptr<Application> leftApp, std::shared_ptr<Application> rightApp) : 
+    desktopPimpl{make_unique<DesktopImpl>(leftApp, rightApp)} {}
 
-Desktop::Desktop(std::shared_ptr<Application> centreApp, DisplayDimensions displayDimensions) : 
-    desktopPimpl{make_unique<DesktopImpl>(centreApp, nullptr, displayDimensions)} {}
+Desktop::Desktop(std::shared_ptr<Application> centreApp) : 
+    desktopPimpl{make_unique<DesktopImpl>(centreApp, nullptr)} {}
 
 void Desktop::setupDesktop() {
     // if (app1 != nullptr) {

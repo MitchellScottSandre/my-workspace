@@ -8,6 +8,7 @@ private:
 
 public:
     DisplayDimensions(int w, int h);
+    ~DisplayDimensions();
     int getWidth();
     int getHeight();
 };

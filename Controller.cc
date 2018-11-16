@@ -3,6 +3,7 @@
 #include "View.h"
 #include "StringUtils.h"
 #include "ScriptService.h"
+#include "DisplayDimensions.h"
 #include "Desktop.h"
 #include "Application.h"
 using namespace std;
@@ -38,16 +39,12 @@ void Controller::receivedDesktopSetupInput(const string input) {
  *            Private Methods          *
  ***************************************/
 
-// bool Controller::validDesktopSetupInputDelimiters(const string input) {
-//     // TODO: delete this?
-//     return true;
-// }
-
+// TODO: refactor this function
 bool Controller::validDesktopSetupInput(const string input) {
     const set<string> APPLICATION_NAMES = ScriptService::getApplicationNames();
+    DisplayDimensions displayDimensions = ScriptService::getDisplayDimensions(); //TODO: make this const
 
     // Parse input tokens into desktop tokens
-    // TODO: generate Desktop objects here. Set them in the model if validation is successful
     vector<string> desktopTokens;
     vector<Desktop> desktops;
     StringUtils::split(desktopTokens, input, View::DESKTOP_DELIMITER);
@@ -69,8 +66,8 @@ bool Controller::validDesktopSetupInput(const string input) {
 
         // Check if applicationName exists in Applications Folder
         for (int i = 0; i < applicationTokens.size(); i++) {
-
             string applicationToken = applicationTokens.at(i);
+            string systemApplicationName;
             StringUtils::trim(applicationToken);
 
             if (applicationToken.at(0) == View::FULL_SCREEN_LEFT_DELIMITER && applicationToken.at(applicationToken.length() - 1) == View::FULL_SCREEN_RIGHT_DELIMITER) {
@@ -84,9 +81,10 @@ bool Controller::validDesktopSetupInput(const string input) {
 
             bool appNameExists = false;
             for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
-                string s = *it;
-                if (StringUtils::str_tolower(s) == StringUtils::str_tolower(applicationToken)) {
+                const string SYSTEM_APP_NAME = *it;
+                if (StringUtils::str_tolower(SYSTEM_APP_NAME) == StringUtils::str_tolower(applicationToken)) {
                     appNameExists = true;
+                    systemApplicationName = SYSTEM_APP_NAME;
                     break;
                 }
             }
@@ -97,8 +95,14 @@ bool Controller::validDesktopSetupInput(const string input) {
             }
 
             if (applicationTokens.size() == 1) {
-                // TODO: create desktop using displaydimension
-                // desktops.emplace_back(Desktop(make_shared<Application>(applicationToken, Application::ApplicationPosition::MIDDLE)));
+                Application::ApplicationPosition position = appIsFullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
+                desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, position, displayDimensions)));
+            } else {
+                // if (i == 0) {
+                //     desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, Application::ApplicationPosition::LEFT), displayDimensions));
+                // } else {
+                //     desktops.emplace_back(Desktop(make_shared<Application>(systemApplicationName, Application::ApplicationPosition::RIGHT), displayDimensions));
+                // }
             }
         }
     }

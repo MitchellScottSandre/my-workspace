@@ -9,9 +9,9 @@
 class StringUtils {
 public:
     static void split(std::vector<std::string> & data, std::string text, char delimiter) {
-        stringstream ss(text);
-        string token;
-        while (getline(ss, token, delimiter)) {
+        std::stringstream ss(text);
+        std::string token;
+        while (std::getline(ss, token, delimiter)) {
             data.emplace_back(token);
         }
     }
