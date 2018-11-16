@@ -41,9 +41,10 @@ void SmartOpen::setDesktops(vector<shared_ptr<Desktop>> desktops) {
 
 void SmartOpen::setupWorkspace() {
     for (int i = 0; i < this->smartOpenPimpl->desktops.size(); i++) {
+                // ScriptService::delay(1);
         shared_ptr<Desktop> desktop = this->smartOpenPimpl->desktops.at(i);
         desktop->setupDesktop();
-        ScriptService::
+        ScriptService::switchDesktops(ScriptService::DesktopDirection::RIGHT);
     }
 }
    

@@ -43,18 +43,30 @@ void Application::putInPosition() {
             loation = "{" + halfWidth + ", 0}";
             size = "{" + halfWidth + ", " + height + "}";
             break;
+        // TODO: FULL_SCREEN
     }
 
     string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + loation + "'";
     string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + size + "'";
-
-    cout << command1 << endl;
-    cout << command2 << endl;
+    
+    // cout << command1 << endl;
+    // cout << command2 << endl;
     ScriptService::executeCommand(command1);
     ScriptService::executeCommand(command2);
+}
+
+void Application::bringToFront() {
+    string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\"\nactivate\nend tell'";
+    // cout << command << endl;
+    ScriptService::executeCommand(command);
 }
 
 void Application::setupApplication() {
     open();
     putInPosition();
+    bringToFront();
+
+    open();
+    putInPosition();
+    bringToFront();
 }
