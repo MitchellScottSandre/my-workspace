@@ -43,30 +43,41 @@ void Application::putInPosition() {
             loation = "{" + halfWidth + ", 0}";
             size = "{" + halfWidth + ", " + height + "}";
             break;
-        // TODO: FULL_SCREEN
+        default:
+            break;
     }
 
     string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + loation + "'";
     string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + size + "'";
     
-    // cout << command1 << endl;
-    // cout << command2 << endl;
     ScriptService::executeCommand(command1);
     ScriptService::executeCommand(command2);
 }
 
 void Application::bringToFront() {
-    string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\"\nactivate\nend tell'";
-    // cout << command << endl;
+    string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\"to activate'";
     ScriptService::executeCommand(command);
 }
 
-void Application::setupApplication() {
-    open();
-    putInPosition();
-    bringToFront();
+void Application::setFullScreen() {
+    string command2 = "osascript -e 'tell application \"System Events\" to keystroke \"f\" using {command down, control down}'";
+    cout << command2 << endl;
+    ScriptService::executeCommand(command2);
+}
 
-    open();
-    putInPosition();
-    bringToFront();
+void Application::setupApplication() {
+    if (this->applicationPimpl->position == ApplicationPosition::FULL_SCREEN) {
+        open();
+        bringToFront();
+        ScriptService::delay(2);
+        setFullScreen();
+    } else {
+        open();
+        putInPosition();
+        bringToFront();
+
+        open();
+        putInPosition();
+        bringToFront();
+    }
 }

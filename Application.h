@@ -14,6 +14,7 @@ private:
     void open();
     void putInPosition();
     void bringToFront();
+    void setFullScreen();
 public:
     enum ApplicationPosition { LEFT, MIDDLE, RIGHT, FULL_SCREEN };
     Application(std::string appName, ApplicationPosition position, DisplayDimensions displayDimensions);

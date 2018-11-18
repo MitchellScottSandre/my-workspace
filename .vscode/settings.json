@@ -18,5 +18,9 @@
         "ostream": "cpp",
         "sstream": "cpp",
         "set": "cpp"
+    },
+    "files.exclude": {
+        "*.d": true,
+        "*.o": true
     }
 }
