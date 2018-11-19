@@ -8,7 +8,7 @@
 #include "Application.h"
 using namespace std;
 
-// const bool Controller::VALID = true;
+const string Controller::NULL_APP_NAME = "NULL_APP_NAME";
 
 struct Controller::ControllerImpl {
     shared_ptr<SmartOpen> model;
@@ -48,6 +48,7 @@ bool Controller::validDesktopSetupInput(const string input) {
         controllerPimpl->model->setDesktops(desktops);
         return VALID;
     }
+
     return ERROR;
 }
 
@@ -69,6 +70,8 @@ bool Controller::parseDesktopTokens(vector<shared_ptr<Desktop>> & desktops, cons
             return ERROR;
         }
     }
+
+    return VALID;
 }
 
 bool Controller::parseApplicationTokens(vector<shared_ptr<Application>> & applications, string desktopToken) {
@@ -80,51 +83,64 @@ bool Controller::parseApplicationTokens(vector<shared_ptr<Application>> & applic
         return ERROR;
     }
 
-    bool appIsFullScreen = false;
-
-    // Check if applicationName exists in Applications Folder
     for (int i = 0; i < applicationTokens.size(); i++) {
+        bool appIsFullScreen = false;
         string applicationToken = applicationTokens.at(i);
         string systemApplicationName;
         StringUtils::trim(applicationToken);
 
-        if (applicationToken.at(0) == View::FULL_SCREEN_LEFT_DELIMITER && applicationToken.at(applicationToken.length() - 1) == View::FULL_SCREEN_RIGHT_DELIMITER) {
-            appIsFullScreen = true;
-            StringUtils::removeFullScreenDelimiters(applicationToken);
-            if (i != 0) {
-                this->controllerPimpl->model->emitError(Event::EventError::INVALID_FULLSCREEN, applicationToken);
-                return ERROR;
-            }
+        if (validFullScreenDelimiter(applicationToken, appIsFullScreen, i) == ERROR) {
+            return ERROR;
         }
 
-        bool appNameExists = false;
-        for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
-            const string SYSTEM_APP_NAME = *it;
-            if (StringUtils::str_tolower(SYSTEM_APP_NAME) == StringUtils::str_tolower(applicationToken)) {
-                appNameExists = true;
-                systemApplicationName = SYSTEM_APP_NAME;
-                break;
-            }
-        }
+        systemApplicationName = getSystemApplicationName(applicationToken);
 
-        if (!appNameExists) {
+        if (systemApplicationName == NULL_APP_NAME) {
             this->controllerPimpl->model->emitError(Event::EventError::BAD_APPLICATION_NAME, applicationToken);
             return ERROR;
         }
 
-        shared_ptr<Application> application;
+        applications.emplace_back(createApplication(systemApplicationName, appIsFullScreen, applicationTokens.size(), i));
+    }
 
-        if (applicationTokens.size() == 1) {
-            Application::ApplicationPosition position = appIsFullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
-            application = make_shared<Application>(systemApplicationName, position, this->controllerPimpl->model->getDisplayDimensions());
-        } else {
-            if (i == 0) {
-                application = make_shared<Application>(systemApplicationName, Application::ApplicationPosition::LEFT, this->controllerPimpl->model->getDisplayDimensions());
-            } else {
-                application = make_shared<Application>(systemApplicationName, Application::ApplicationPosition::RIGHT, this->controllerPimpl->model->getDisplayDimensions());
-            }
+    return VALID;
+}
+
+bool Controller::validFullScreenDelimiter(string & applicationToken, bool & appIsFullScreen, const int tokenIndex) {
+    if (applicationToken.at(0) == View::FULL_SCREEN_LEFT_DELIMITER && applicationToken.at(applicationToken.length() - 1) == View::FULL_SCREEN_RIGHT_DELIMITER) {
+        if (tokenIndex != 0) {
+            this->controllerPimpl->model->emitError(Event::EventError::INVALID_FULLSCREEN, applicationToken);
+            return ERROR;
         }
 
-        applications.emplace_back(application);
+        appIsFullScreen = true;
+        StringUtils::removeFullScreenDelimiters(applicationToken);
+    }
+    return VALID;
+}
+
+string Controller::getSystemApplicationName(string applicationToken) {
+    const set<string> APPLICATION_NAMES = this->controllerPimpl->model->getApplicationNames();
+
+    for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
+        const string SYSTEM_APP_NAME = *it;
+        if (StringUtils::str_tolower(SYSTEM_APP_NAME) == StringUtils::str_tolower(applicationToken)) {
+            return SYSTEM_APP_NAME;
+        }
+    }
+
+    return NULL_APP_NAME;
+}
+
+shared_ptr<Application> Controller::createApplication(string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex) {
+    if (numTokensInDesktop == 1) {
+        Application::ApplicationPosition position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
+        return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions());
+    } else {
+        if (tokenIndex == 0) {
+            return make_shared<Application>(systemAppName, Application::ApplicationPosition::LEFT, this->controllerPimpl->model->getDisplayDimensions());
+        } else {
+            return make_shared<Application>(systemAppName, Application::ApplicationPosition::RIGHT, this->controllerPimpl->model->getDisplayDimensions());
+        }
     }
 }
