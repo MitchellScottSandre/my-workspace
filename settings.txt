@@ -1,0 +1,6 @@
+
+ALIASES
+ALIAS["Code":"Visual Studio Code"]
+
+WORKSPACES
+WORKSPACE[]

@@ -27,7 +27,6 @@ Controller::~Controller() {}
  ***************************************/
 
 void Controller::receivedDesktopSetupInput(const string input) {
-    // bool validDelimiters = validDesktopSetupInputDelimiters(input);
     bool validDesktopSetup = validDesktopSetupInput(input);
 
     if (validDesktopSetup == VALID) {
@@ -41,7 +40,6 @@ void Controller::receivedDesktopSetupInput(const string input) {
  *            Private Methods          *
  ***************************************/
 
-// TODO: refactor this function
 bool Controller::validDesktopSetupInput(const string input) {
     vector<shared_ptr<Desktop>> desktops;
     if (parseDesktopTokens(desktops, input) == VALID) {

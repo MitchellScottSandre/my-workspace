@@ -17,11 +17,6 @@ private:
     std::unique_ptr<SmartOpenImpl> smartOpenPimpl;
 
 public:
-    static const int POSITION_LEFT;
-    static const int POSITION_MIDDLE;
-    static const int POSITION_RIGHT;
-    static const int FULL_SCREEN;
-
     SmartOpen();
     ~SmartOpen();
 

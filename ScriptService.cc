@@ -1,8 +1,6 @@
 #include <iostream>
-#include <sstream>      // std::stringstream
-#include <istream>      // std::getLine
-#include <stdio.h>
-#include <stdlib.h> // TODO: remove unused ones
+#include <sstream>      
+#include <istream>      
 #include "ScriptService.h"
 #include "StringUtils.h"
 #include "DisplayDimensions.h"

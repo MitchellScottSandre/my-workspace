@@ -14,6 +14,7 @@ class Controller {
     std::unique_ptr<ControllerImpl> controllerPimpl;
     static const bool VALID = true;
     static const bool ERROR = false;
+
     static const std::string NULL_APP_NAME;
     bool validDesktopSetupInput(const std::string input);
     bool parseDesktopTokens(std::vector<std::shared_ptr<Desktop>> & desktops, const std::string input);
