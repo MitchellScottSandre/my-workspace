@@ -4,13 +4,19 @@
 #include "Desktop.h"
 #include "SmartOpen.h"
 #include "ScriptService.h"
+#include "DisplayDimensions.h"
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
     Event currentEvent;
     vector<shared_ptr<Desktop>> desktops;
+    const set<string> APPLICATION_NAMES;
+    const DisplayDimensions DISPLAY_DIMENSIONS; 
 
-    SmartOpenImpl() : currentEvent{Event()} {}
+    SmartOpenImpl() : 
+        currentEvent{Event()}, 
+        APPLICATION_NAMES{ScriptService::getApplicationNames()}, 
+        DISPLAY_DIMENSIONS{ScriptService::getDisplayDimensions()} {}
 };
 
 SmartOpen::SmartOpen() : smartOpenPimpl{make_unique<SmartOpenImpl>()} {}
@@ -46,6 +52,14 @@ void SmartOpen::setupWorkspace() {
         desktop->setupDesktop();
         ScriptService::switchDesktops(ScriptService::DesktopDirection::RIGHT);
     }
+}
+
+set<string> SmartOpen::getApplicationNames() {
+    return this->smartOpenPimpl->APPLICATION_NAMES;
+}
+
+DisplayDimensions SmartOpen::getDisplayDimensions() {
+    return this->smartOpenPimpl->DISPLAY_DIMENSIONS;
 }
    
 /**********************************

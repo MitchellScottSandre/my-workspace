@@ -4,10 +4,12 @@
 #include <vector>
 #include <memory>
 #include <vector>
+#include <set>
 #include "Subject.h"
 #include "Event.h"
 
 class Desktop;
+class DisplayDimensions;
 
 class SmartOpen: public Subject {
 private:
@@ -29,6 +31,9 @@ public:
     Event getLastEvent();
     void setupWorkspace();
     void setDesktops(std::vector<std::shared_ptr<Desktop>> desktops);
+
+    std::set<std::string> getApplicationNames();
+    DisplayDimensions getDisplayDimensions();
 };
 
 #endif

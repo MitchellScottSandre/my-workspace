@@ -10,10 +10,11 @@ class SmartOpen;
 class Controller {
     struct ControllerImpl;
     std::unique_ptr<ControllerImpl> controllerPimpl;
-
-    // bool validDesktopSetupInputDelimiters(const std::string input);
+    static const bool VALID = true;
+    static const bool ERROR = false;
     bool validDesktopSetupInput(const std::string input);
-    // bool validApplicationName(const std::string appName);
+    bool parseApplicationTokens(std::vector<std::shared_ptr<Application>> & applications, std::string desktopToken);
+    bool parseDesktopTokens(std::vector<std::shared_ptr<Desktop>> & desktops, const std::string input);
 public:
     Controller(std::shared_ptr<SmartOpen> m);
     ~Controller();
