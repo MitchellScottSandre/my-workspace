@@ -34,7 +34,7 @@ void SmartOpen::run() {
 }
 
 void SmartOpen::emitEvent(Event e) {
-    cout << "Emitting Event: " << e << endl;
+    // cout << "Emitting Event: " << e << endl;
     this->smartOpenPimpl->currentEvent = e;
     this->notifyObservers();
 }
