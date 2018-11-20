@@ -10,7 +10,6 @@ class Application {
 private:
     struct ApplicationImpl;
     std::unique_ptr<ApplicationImpl> applicationPimpl;
-
     void open();
     void putInPosition();
     void bringToFront();

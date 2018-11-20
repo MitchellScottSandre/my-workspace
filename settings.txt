@@ -1,6 +1,3 @@
-
-ALIASES
 ALIAS["Code":"Visual Studio Code"]
-
-WORKSPACES
+ALIAS["Chrome":"Google Chrome"]
 WORKSPACE[]

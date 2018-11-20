@@ -21,6 +21,7 @@ TODO:
 - [ ] save your preferred workspace organization
 - [ ] entity and value
 - [ ] proper code citation
+- [ ] sort imports alphabetically
 
 //TextEdit: make new document
 //GoogleChrome: make new window

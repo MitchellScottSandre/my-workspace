@@ -6,6 +6,7 @@
 #include "DisplayDimensions.h"
 #include "Desktop.h"
 #include "Application.h"
+#include "Alias.h"
 using namespace std;
 
 const string Controller::NULL_APP_NAME = "NULL_APP_NAME";
@@ -124,6 +125,14 @@ string Controller::getSystemApplicationName(string applicationToken) {
         const string SYSTEM_APP_NAME = *it;
         if (StringUtils::str_tolower(SYSTEM_APP_NAME) == StringUtils::str_tolower(applicationToken)) {
             return SYSTEM_APP_NAME;
+        }
+    }
+
+    const vector<shared_ptr<Alias>> ALIASES = this->controllerPimpl->model->getAliases();
+
+    for (auto it = ALIASES.begin(); it != ALIASES.end(); ++it) {
+        if (StringUtils::str_tolower((*it)->getAlias()) == StringUtils::str_tolower(applicationToken)) {
+            return (*it)->getSystemApplicationName();
         }
     }
 

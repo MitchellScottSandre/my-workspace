@@ -5,17 +5,21 @@
 #include "SmartOpen.h"
 #include "ScriptService.h"
 #include "DisplayDimensions.h"
+#include "FileService.h"
+#include "Alias.h"
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
     Event currentEvent;
     vector<shared_ptr<Desktop>> desktops;
-    const set<string> APPLICATION_NAMES;
+    const set<string> APPLICATION_NAMES; //TODO: make this a vector again
+    const vector<shared_ptr<Alias>> APPLICATION_ALIASES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
     SmartOpenImpl() : 
         currentEvent{Event()}, 
         APPLICATION_NAMES{ScriptService::getApplicationNames()}, 
+        APPLICATION_ALIASES{FileService::readAliases()},
         DISPLAY_DIMENSIONS{ScriptService::getDisplayDimensions()} {}
 };
 
@@ -59,4 +63,8 @@ set<string> SmartOpen::getApplicationNames() {
 
 DisplayDimensions SmartOpen::getDisplayDimensions() {
     return this->smartOpenPimpl->DISPLAY_DIMENSIONS;
+}
+
+vector<shared_ptr<Alias>> SmartOpen::getAliases() {
+    return this->smartOpenPimpl->APPLICATION_ALIASES;
 }

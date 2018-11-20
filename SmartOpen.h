@@ -8,6 +8,7 @@
 #include "Subject.h"
 #include "Event.h"
 
+class Alias;
 class Desktop;
 class DisplayDimensions;
 
@@ -28,6 +29,7 @@ public:
     void setDesktops(std::vector<std::shared_ptr<Desktop>> desktops);
 
     std::set<std::string> getApplicationNames();
+    std::vector<std::shared_ptr<Alias>> getAliases();
     DisplayDimensions getDisplayDimensions();
 };
 
