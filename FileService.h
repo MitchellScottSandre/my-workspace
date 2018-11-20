@@ -5,6 +5,7 @@
 #include <memory>
 
 class Alias;
+
 class FileService {
 private:
     static const std::string SETTINGS_FILE_NAME;

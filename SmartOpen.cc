@@ -12,7 +12,7 @@ using namespace std;
 struct SmartOpen::SmartOpenImpl {
     Event currentEvent;
     vector<shared_ptr<Desktop>> desktops;
-    const set<string> APPLICATION_NAMES; //TODO: make this a vector again
+    const vector<string> APPLICATION_NAMES; 
     const vector<shared_ptr<Alias>> APPLICATION_ALIASES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
@@ -29,10 +29,12 @@ SmartOpen::~SmartOpen() {}
 
 void SmartOpen::run() {
     emitEvent(Event::EventType::DISPLAY_WELCOME);
-    emitEvent(Event::EventType::GET_DESKTOP_SETUP_INPUT);
+    emitEvent(Event::EventType::GET_MENU_INPUT);
+    // emitEvent(Event::EventType::GET_DESKTOP_SETUP_INPUT);
 }
 
 void SmartOpen::emitEvent(Event e) {
+    cout << "Emitting Event: " << e << endl;
     this->smartOpenPimpl->currentEvent = e;
     this->notifyObservers();
 }
@@ -57,7 +59,7 @@ void SmartOpen::setupWorkspace() {
     }
 }
 
-set<string> SmartOpen::getApplicationNames() {
+vector<string> SmartOpen::getApplicationNames() {
     return this->smartOpenPimpl->APPLICATION_NAMES;
 }
 

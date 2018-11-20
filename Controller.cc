@@ -27,7 +27,19 @@ Controller::~Controller() {}
  *            Public Methods           *
  ***************************************/
 
-void Controller::receivedDesktopSetupInput(const string input) {
+void Controller::receivedMenuInput(string input) {
+    bool validMenuInput = validNumberInput(input, 1, 2);
+
+    if (validMenuInput == VALID) {
+        Event::EventType event = input == "1" ? Event::EventType::GET_DESKTOP_SETUP_INPUT : Event::EventType::GET_EXISTING_WORKSPACE_INPUT;
+        this->controllerPimpl->model->emitEvent(event);
+    } else {
+        this->controllerPimpl->model->emitError(Event::EventError::BAD_MENU_INPUT, input);
+        this->controllerPimpl->model->emitEvent(Event::EventType::GET_MENU_INPUT);
+    }
+}
+
+void Controller::receivedDesktopSetupInput(string input) {
     bool validDesktopSetup = validDesktopSetupInput(input);
 
     if (validDesktopSetup == VALID) {
@@ -61,9 +73,9 @@ bool Controller::parseDesktopTokens(vector<shared_ptr<Desktop>> & desktops, cons
 
         if (parseApplicationTokens(applications, desktopToken) == VALID) {
             if (applications.size() == 1) {
-                desktops.emplace_back(make_shared<Desktop>(applications.at(0)));
+                desktops.emplace_back(make_shared<Desktop>(applications.at(Application::LEFT_INDEX)));
             } else if (applications.size() == 2) {
-                desktops.emplace_back(make_shared<Desktop>(applications.at(0), applications.at(1)));
+                desktops.emplace_back(make_shared<Desktop>(applications.at(Application::LEFT_INDEX), applications.at(Application::RIGHT_INDEX)));
             }
         } else {
             return ERROR;
@@ -119,7 +131,7 @@ bool Controller::validFullScreenDelimiter(string & applicationToken, bool & appI
 }
 
 string Controller::getSystemApplicationName(string applicationToken) {
-    const set<string> APPLICATION_NAMES = this->controllerPimpl->model->getApplicationNames();
+    const vector<string> APPLICATION_NAMES = this->controllerPimpl->model->getApplicationNames();
 
     for (auto it = APPLICATION_NAMES.begin(); it != APPLICATION_NAMES.end(); ++it) {
         const string SYSTEM_APP_NAME = *it;
@@ -146,10 +158,21 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
         Application::ApplicationPosition position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
         return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions());
     } else {
-        if (tokenIndex == 0) {
+        if (tokenIndex == Application::LEFT_INDEX) {
             return make_shared<Application>(systemAppName, Application::ApplicationPosition::LEFT, this->controllerPimpl->model->getDisplayDimensions());
         } else {
             return make_shared<Application>(systemAppName, Application::ApplicationPosition::RIGHT, this->controllerPimpl->model->getDisplayDimensions());
         }
     }
+}
+
+bool Controller::validNumberInput(string input, int min, int max) {
+    int inputValue = -1;
+    try {
+        inputValue = stoi(input);
+    } catch (...) {
+        return false;
+    }
+
+    return inputValue >= min && inputValue <= max;
 }

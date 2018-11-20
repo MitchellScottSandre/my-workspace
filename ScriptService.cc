@@ -26,18 +26,18 @@ string ScriptService::executeCommand(string cmd) {
     return data;
 }
 
-set<string> ScriptService::getApplicationNames() {
+vector<string> ScriptService::getApplicationNames() {
     const string GET_APPLICATION_NAMES_COMMAND = "cd //Applications && find . -name '*.app' -maxdepth 2 -exec basename {} \\; | sort";
     const string applicationNamesText = executeCommand(GET_APPLICATION_NAMES_COMMAND);
     stringstream ss(applicationNamesText);
-    set<string> namesSet;
+    vector<string> namesList;
     string appName;
 
     while (getline(ss, appName, '\n')) {
-        namesSet.insert(ScriptService::formatAppName(appName));
+        namesList.emplace_back(ScriptService::formatAppName(appName));
     }
 
-    return namesSet;
+    return namesList;
 }
 
 void ScriptService::delay(int duration) {

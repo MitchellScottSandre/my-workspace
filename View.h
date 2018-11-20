@@ -13,7 +13,9 @@ private:
     std::unique_ptr<ViewImpl> viewPimpl;
 
     void displayWelcome();
+    void getMenuInput();
     void getDesktopSetupInput();
+    void getExistingWorkspaceInput();
     void displayError(Event::EventError error, std::string errorMessage);
 public:
     static const std::string DESKTOP_DELIMITER;

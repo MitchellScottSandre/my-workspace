@@ -30,9 +30,14 @@ void View::getNotified() {
         case Event::EventType::DISPLAY_WELCOME:
             displayWelcome();
             break;
+        case Event::EventType::GET_MENU_INPUT:
+            getMenuInput();
+            break;
         case Event::EventType::GET_DESKTOP_SETUP_INPUT:
             getDesktopSetupInput();
             break;
+        case Event::EventType::GET_EXISTING_WORKSPACE_INPUT:
+            getExistingWorkspaceInput();
         case Event::EventType::ERROR:
             displayError(e.error, e.data);
             break;
@@ -41,11 +46,19 @@ void View::getNotified() {
     }
 }
 
-//
-
 void View::displayWelcome() {
-    cout << endl;
     cout << "displayWelcome" << endl;
+}
+
+void View::getMenuInput() {
+    cout << endl;
+    cout << "Press 1 to open a new Workspace." << endl;
+    cout << "Press 2 to load an existing Workspace." << endl;
+
+    string input;
+    cin >> input;
+
+    viewPimpl->controller->receivedMenuInput(input);
 }
 
 void View::getDesktopSetupInput() {
@@ -60,9 +73,16 @@ void View::getDesktopSetupInput() {
     viewPimpl->controller->receivedDesktopSetupInput(input);
 }
 
+void View::getExistingWorkspaceInput() {
+
+}
+
 void View::displayError(Event::EventError error, string errorMessage) {
     string output = "";
     switch(error) {
+        case Event::EventError::BAD_MENU_INPUT:
+            output = "Invalid menu input: " + errorMessage;
+            break;
         case Event::EventError::BAD_APPLICATION_NAME:
             output = "Invalid Application Name: " + errorMessage;
             break;

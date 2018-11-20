@@ -17,12 +17,12 @@
 
 TODO:
 - [ ] check if application is already open
-- [ ] save aliases for applications
+- [x] save aliases for applications
 - [ ] save your preferred workspace organization
 - [ ] entity and value
 - [ ] proper code citation
 - [ ] sort imports alphabetically
-
+- [ ] clean up code. comments
 //TextEdit: make new document
 //GoogleChrome: make new window
 

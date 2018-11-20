@@ -4,6 +4,7 @@
 #include <istream>      // std::getLine
 #include <vector>
 #include <string>
+#include <algorithm>
 
 //TODO: refactor this into one StringUitl class
 class StringUtils {
@@ -66,6 +67,7 @@ public:
     static bool equalsIgnoreCase(std::string a, std::string b) {
         return StringUtils::str_tolower(a) == StringUtils::str_tolower(b);
     }
+
 };
 
 #endif

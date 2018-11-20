@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 #include <vector>
-#include <set>
 #include "Subject.h"
 #include "Event.h"
 
@@ -28,7 +27,7 @@ public:
     void setupWorkspace();
     void setDesktops(std::vector<std::shared_ptr<Desktop>> desktops);
 
-    std::set<std::string> getApplicationNames();
+    std::vector<std::string> getApplicationNames();
     std::vector<std::shared_ptr<Alias>> getAliases();
     DisplayDimensions getDisplayDimensions();
 };

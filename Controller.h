@@ -20,12 +20,14 @@ class Controller {
     bool parseDesktopTokens(std::vector<std::shared_ptr<Desktop>> & desktops, const std::string input);
     bool parseApplicationTokens(std::vector<std::shared_ptr<Application>> & applications, std::string desktopToken);
     bool validFullScreenDelimiter(std::string & applicationToken, bool & appIsFullScreen, const int tokenIndex);
+    bool validNumberInput(std::string input, int min, int max);
     std::string getSystemApplicationName(std::string applicationToken);
     std::shared_ptr<Application> createApplication(std::string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex);
 public:
     Controller(std::shared_ptr<SmartOpen> m);
     ~Controller();
 
+    void receivedMenuInput(std::string input);
     void receivedDesktopSetupInput(std::string input);
 };
 
