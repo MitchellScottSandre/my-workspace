@@ -29,6 +29,7 @@ public:
 
     void receivedMenuInput(std::string input);
     void receivedDesktopSetupInput(std::string input);
+    void receivedSaveWorkspaceInput(std::string input);
 };
 
 #endif

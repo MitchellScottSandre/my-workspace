@@ -30,11 +30,9 @@ SmartOpen::~SmartOpen() {}
 void SmartOpen::run() {
     emitEvent(Event::EventType::DISPLAY_WELCOME);
     emitEvent(Event::EventType::GET_MENU_INPUT);
-    // emitEvent(Event::EventType::GET_DESKTOP_SETUP_INPUT);
 }
 
 void SmartOpen::emitEvent(Event e) {
-    // cout << "Emitting Event: " << e << endl;
     this->smartOpenPimpl->currentEvent = e;
     this->notifyObservers();
 }
@@ -55,8 +53,19 @@ void SmartOpen::setupWorkspace() {
     for (int i = 0; i < this->smartOpenPimpl->desktops.size(); i++) {
         shared_ptr<Desktop> desktop = this->smartOpenPimpl->desktops.at(i);
         desktop->setupDesktop();
-        ScriptService::switchDesktops(ScriptService::DesktopDirection::RIGHT);
+
+        if (i < this->smartOpenPimpl->desktops.size() - 1) {
+            ScriptService::switchDesktops(ScriptService::DesktopDirection::RIGHT);
+        }
     }
+}
+
+void SmartOpen::saveWorkspace() {
+    string workspaceText = "";
+    for (int i = 0; i < this->smartOpenPimpl->desktops.size(); ++i) {
+        workspaceText += this->smartOpenPimpl->desktops.at(i)->toString() + " ||";
+    }
+    FileService::createWorkspace(workspaceText);
 }
 
 vector<string> SmartOpen::getApplicationNames() {

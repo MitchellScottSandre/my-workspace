@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 
-//TODO: refactor this into one StringUitl class
 class StringUtils {
 public:
     static void split(std::vector<std::string> & data, std::string text, char delimiter) {
@@ -38,14 +37,12 @@ public:
     }
     
     static void trim(std::string & s) {
-        // Trim start of word
         char c = s.at(0);
         while (c == ' ') {
             s.erase(0, 1);
             c = s.at(0);
         }
 
-        // Trim end of word
         c = s.at(s.length() - 1);
         while (c == ' ') {
             s.erase(s.length() - 1, 1);

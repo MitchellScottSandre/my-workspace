@@ -22,6 +22,7 @@ public:
     ~Application();
 
     void setupApplication();
+    std::string toString();
 };
 
 #endif

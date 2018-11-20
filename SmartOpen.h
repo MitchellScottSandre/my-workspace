@@ -20,12 +20,13 @@ public:
     SmartOpen();
     ~SmartOpen();
 
+    Event getLastEvent();
     void run();
     void emitError(Event::EventError e, std::string errorMessage = "");
     void emitEvent(Event e);
-    Event getLastEvent();
     void setupWorkspace();
     void setDesktops(std::vector<std::shared_ptr<Desktop>> desktops);
+    void saveWorkspace();
 
     std::vector<std::string> getApplicationNames();
     std::vector<std::shared_ptr<Alias>> getAliases();

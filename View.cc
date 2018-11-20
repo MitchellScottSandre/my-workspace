@@ -38,6 +38,8 @@ void View::getNotified() {
             break;
         case Event::EventType::GET_EXISTING_WORKSPACE_INPUT:
             getExistingWorkspaceInput();
+        case Event::EventType::ASK_TO_SAVE_WORKSPACE:
+            getSaveWorkspace();
         case Event::EventType::ERROR:
             displayError(e.error, e.data);
             break;
@@ -56,7 +58,7 @@ void View::getMenuInput() {
     cout << "Press 2 to load an existing Workspace." << endl;
 
     string input;
-    cin >> input;
+    getline(cin, input);
 
     viewPimpl->controller->receivedMenuInput(input);
 }
@@ -75,6 +77,17 @@ void View::getDesktopSetupInput() {
 
 void View::getExistingWorkspaceInput() {
 
+}
+
+void View::getSaveWorkspace() {
+    cout << endl;
+    cout << "Enter 1 to save current workspace" << endl;
+    cout << "Enter 2 to quit" << endl;
+
+    string input;
+    getline(cin, input);
+
+    viewPimpl->controller->receivedSaveWorkspaceInput(input);
 }
 
 void View::displayError(Event::EventError error, string errorMessage) {

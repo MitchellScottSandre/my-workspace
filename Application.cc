@@ -81,3 +81,11 @@ void Application::setupApplication() {
         bringToFront();
     }
 }
+
+string Application::toString() {
+    if (this->applicationPimpl->position == ApplicationPosition::FULL_SCREEN) {
+        return "<" + this->applicationPimpl->name + ">";
+    }
+
+    return this->applicationPimpl->name;
+}

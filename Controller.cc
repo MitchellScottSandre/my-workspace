@@ -44,8 +44,21 @@ void Controller::receivedDesktopSetupInput(string input) {
 
     if (validDesktopSetup == VALID) {
         this->controllerPimpl->model->setupWorkspace();
+        this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
+
     } else {
         this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_DESKTOP_SETUP_INPUT));
+    }
+}
+
+void Controller::receivedSaveWorkspaceInput(string input) {
+    bool validSaveInput = validNumberInput(input, 1, 2);
+
+    if (validSaveInput == VALID) {
+        this->controllerPimpl->model->saveWorkspace();
+    } else {
+        this->controllerPimpl->model->emitError(Event::EventError::BAD_SAVE_INPUT, input);
+        this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
     }
 }
 

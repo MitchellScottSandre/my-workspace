@@ -29,6 +29,13 @@ vector<string> FileService::readWorkspaces() {
     return FileService::readTokenLines(FileService::WORKSPACE_TOKEN);
 }
 
+
+void FileService::createWorkspace(string workspace) {
+    fstream file;
+    file.open(FileService::SETTINGS_FILE_NAME, std::ios::app);
+    file << "\n" << FileService::WORKSPACE_TOKEN << "[" << workspace << "]";
+}
+
 /***************************************
  *            Private Methods          *
  ***************************************/

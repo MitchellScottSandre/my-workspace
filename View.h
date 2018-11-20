@@ -16,6 +16,7 @@ private:
     void getMenuInput();
     void getDesktopSetupInput();
     void getExistingWorkspaceInput();
+    void getSaveWorkspace();
     void displayError(Event::EventError error, std::string errorMessage);
 public:
     static const std::string DESKTOP_DELIMITER;

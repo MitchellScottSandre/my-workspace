@@ -17,7 +17,8 @@
         "algorithm": "cpp",
         "ostream": "cpp",
         "sstream": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "istream": "cpp"
     },
     "files.exclude": {
         "*.d": true,
