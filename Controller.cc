@@ -131,6 +131,8 @@ string Controller::getSystemApplicationName(string applicationToken) {
     const vector<shared_ptr<Alias>> ALIASES = this->controllerPimpl->model->getAliases();
 
     for (auto it = ALIASES.begin(); it != ALIASES.end(); ++it) {
+        if ((*it)->isValid() == ERROR) continue;
+        
         if (StringUtils::str_tolower((*it)->getAlias()) == StringUtils::str_tolower(applicationToken)) {
             return (*it)->getSystemApplicationName();
         }

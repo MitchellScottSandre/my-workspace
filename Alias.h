@@ -11,6 +11,7 @@ private:
 public:
     Alias(std::string text);
     ~Alias();
+    bool isValid();
     std::string getAlias();
     std::string getSystemApplicationName();
 };
