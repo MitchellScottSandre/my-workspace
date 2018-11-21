@@ -28,8 +28,9 @@ public:
     ~Controller();
 
     void receivedMenuInput(std::string input);
-    void receivedDesktopSetupInput(std::string input);
-    void receivedSaveWorkspaceInput(std::string input);
+    void parseWorkspaceInput(std::string input);
+    void receivedSaveWorkspaceMenuInput(std::string input);
+    void receivedLoadExistingWorkspaceInput(std::string input);
 };
 
 #endif

@@ -13,15 +13,21 @@ struct SmartOpen::SmartOpenImpl {
     Event currentEvent;
     vector<shared_ptr<Desktop>> desktops;
     const vector<string> APPLICATION_NAMES; 
+    const vector<string> SAVED_WORKSPACES;
     const vector<shared_ptr<Alias>> APPLICATION_ALIASES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
     SmartOpenImpl() : 
         currentEvent{Event()}, 
-        APPLICATION_NAMES{ScriptService::getApplicationNames()}, 
+        APPLICATION_NAMES{ScriptService::getApplicationNames()},
+        SAVED_WORKSPACES{FileService::readWorkspaces()},
         APPLICATION_ALIASES{FileService::readAliases()},
         DISPLAY_DIMENSIONS{ScriptService::getDisplayDimensions()} {}
 };
+
+/***************************************
+ *            Public Methods           *
+ ***************************************/
 
 SmartOpen::SmartOpen() : smartOpenPimpl{make_unique<SmartOpenImpl>()} {}
 
@@ -65,11 +71,18 @@ void SmartOpen::saveWorkspace() {
     for (int i = 0; i < this->smartOpenPimpl->desktops.size(); ++i) {
         workspaceText += this->smartOpenPimpl->desktops.at(i)->toString() + " ||";
     }
-    FileService::createWorkspace(workspaceText);
+
+    if (!workspaceAlreadyExists(workspaceText)) {
+        FileService::createWorkspace(workspaceText);
+    }
 }
 
 vector<string> SmartOpen::getApplicationNames() {
     return this->smartOpenPimpl->APPLICATION_NAMES;
+}
+
+vector<string> SmartOpen::getExistingWorkspaces() {
+    return this->smartOpenPimpl->SAVED_WORKSPACES;
 }
 
 DisplayDimensions SmartOpen::getDisplayDimensions() {
@@ -78,4 +91,18 @@ DisplayDimensions SmartOpen::getDisplayDimensions() {
 
 vector<shared_ptr<Alias>> SmartOpen::getAliases() {
     return this->smartOpenPimpl->APPLICATION_ALIASES;
+}
+
+/***************************************
+ *            Private Methods          *
+ ***************************************/
+
+bool SmartOpen::workspaceAlreadyExists(string workspace) {
+    for (string w : this->smartOpenPimpl->SAVED_WORKSPACES) {
+        if (w == workspace) {
+            return true;
+        }
+    }
+
+    return false;
 }

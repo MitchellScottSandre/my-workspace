@@ -17,8 +17,6 @@
 
 TODO:
 - [ ] check if application is already open
-- [x] save aliases for applications
-- [ ] save your preferred workspace organization
 - [ ] entity and value
 - [ ] proper code citation
 - [ ] sort imports alphabetically

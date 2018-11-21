@@ -1,2 +1,4 @@
 ALIAS["Code":"Visual Studio Code"]
 ALIAS["Chrome":"Google Chrome"]
+WORKSPACE[ Notes | Calendar ||]
+WORKSPACE[ Stocks || Wunderlist ||]

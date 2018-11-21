@@ -38,8 +38,10 @@ void View::getNotified() {
             break;
         case Event::EventType::GET_EXISTING_WORKSPACE_INPUT:
             getExistingWorkspaceInput();
+            break;
         case Event::EventType::ASK_TO_SAVE_WORKSPACE:
             getSaveWorkspace();
+            break;
         case Event::EventType::ERROR:
             displayError(e.error, e.data);
             break;
@@ -72,11 +74,25 @@ void View::getDesktopSetupInput() {
     string input;
     getline(cin, input);
 
-    viewPimpl->controller->receivedDesktopSetupInput(input);
+    viewPimpl->controller->parseWorkspaceInput(input);
 }
 
 void View::getExistingWorkspaceInput() {
+    const vector<string> EXISTING_WORKSPACES = viewPimpl->model->getExistingWorkspaces();
 
+    if (EXISTING_WORKSPACES.empty()) {
+        this->viewPimpl->model->emitError(Event::EventError::NO_SAVED_WORKSPACES);
+        this->viewPimpl->model->emitEvent(Event::GET_MENU_INPUT);
+    } else {
+        for (int i = 0; i < EXISTING_WORKSPACES.size(); ++i) {
+            cout << "Enter " << i << " to open workspace: " << EXISTING_WORKSPACES.at(i) << endl;
+        }
+
+        string input;
+        getline(cin, input);
+
+        this->viewPimpl->controller->receivedLoadExistingWorkspaceInput(input);
+    }
 }
 
 void View::getSaveWorkspace() {
@@ -87,16 +103,13 @@ void View::getSaveWorkspace() {
     string input;
     getline(cin, input);
 
-    viewPimpl->controller->receivedSaveWorkspaceInput(input);
+    viewPimpl->controller->receivedSaveWorkspaceMenuInput(input);
 }
 
 void View::displayError(Event::EventError error, string errorMessage) {
     string output = "";
     switch(error) {
-        case Event::EventError::BAD_MENU_INPUT:
-            output = "Invalid menu input: " + errorMessage;
-            break;
-        case Event::EventError::BAD_APPLICATION_NAME:
+        case Event::EventError::INVALID_APPLICATION_NAME:
             output = "Invalid Application Name: " + errorMessage;
             break;
         case Event::EventError::TOO_MANY_APPLICATIONS:
@@ -104,6 +117,12 @@ void View::displayError(Event::EventError error, string errorMessage) {
             break;
         case Event::EventError::INVALID_FULLSCREEN:
             output = "Can't have another application open with " + errorMessage + " in full screen";
+            break;
+        case Event::EventError::NO_SAVED_WORKSPACES:
+            output = "You don't have any saved workspaces";
+            break;
+        case Event::EventError::INVALID_NUMBER_INPUT:
+            output = "Input couldn't be parsed or was out of range";
             break;
         default:
             return;

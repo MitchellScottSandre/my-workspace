@@ -16,6 +16,7 @@ private:
     struct SmartOpenImpl;
     std::unique_ptr<SmartOpenImpl> smartOpenPimpl;
 
+    bool workspaceAlreadyExists(std::string workspace);
 public:
     SmartOpen();
     ~SmartOpen();
@@ -29,6 +30,7 @@ public:
     void saveWorkspace();
 
     std::vector<std::string> getApplicationNames();
+    std::vector<std::string> getExistingWorkspaces();
     std::vector<std::shared_ptr<Alias>> getAliases();
     DisplayDimensions getDisplayDimensions();
 };

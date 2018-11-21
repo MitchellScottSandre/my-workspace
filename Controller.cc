@@ -19,13 +19,13 @@ struct Controller::ControllerImpl {
     ~ControllerImpl() {}
 };
 
-Controller::Controller(shared_ptr<SmartOpen> m) : controllerPimpl{make_unique<ControllerImpl>(m)} {}
-
-Controller::~Controller() {}
-
 /***************************************
  *            Public Methods           *
  ***************************************/
+
+Controller::Controller(shared_ptr<SmartOpen> m) : controllerPimpl{make_unique<ControllerImpl>(m)} {}
+
+Controller::~Controller() {}
 
 void Controller::receivedMenuInput(string input) {
     bool validMenuInput = validNumberInput(input, 1, 2);
@@ -34,34 +34,42 @@ void Controller::receivedMenuInput(string input) {
         Event::EventType event = input == "1" ? Event::EventType::GET_DESKTOP_SETUP_INPUT : Event::EventType::GET_EXISTING_WORKSPACE_INPUT;
         this->controllerPimpl->model->emitEvent(event);
     } else {
-        this->controllerPimpl->model->emitError(Event::EventError::BAD_MENU_INPUT, input);
         this->controllerPimpl->model->emitEvent(Event::EventType::GET_MENU_INPUT);
     }
 }
 
-void Controller::receivedDesktopSetupInput(string input) {
+void Controller::parseWorkspaceInput(string input) {
     bool validDesktopSetup = validDesktopSetupInput(input);
 
     if (validDesktopSetup == VALID) {
         this->controllerPimpl->model->setupWorkspace();
         this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
-
     } else {
-        this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_DESKTOP_SETUP_INPUT));
+        this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_MENU_INPUT));
     }
 }
 
-void Controller::receivedSaveWorkspaceInput(string input) {
+void Controller::receivedSaveWorkspaceMenuInput(string input) {
     bool validSaveInput = validNumberInput(input, 1, 2);
 
     if (validSaveInput == VALID) {
         this->controllerPimpl->model->saveWorkspace();
     } else {
-        this->controllerPimpl->model->emitError(Event::EventError::BAD_SAVE_INPUT, input);
         this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
     }
 }
 
+void Controller::receivedLoadExistingWorkspaceInput(string input) {
+    const int numberExistingWorkspaces = this->controllerPimpl->model->getExistingWorkspaces().size();
+    bool validExistingWorkspaceInput = validNumberInput(input, 0, numberExistingWorkspaces - 1);
+
+    if (validExistingWorkspaceInput == VALID) {
+        int inputValue = stoi(input);
+        parseWorkspaceInput(this->controllerPimpl->model->getExistingWorkspaces().at(inputValue));
+    } else {
+        this->controllerPimpl->model->emitEvent(Event::GET_EXISTING_WORKSPACE_INPUT);
+    }
+}
 /***************************************
  *            Private Methods          *
  ***************************************/
@@ -120,7 +128,7 @@ bool Controller::parseApplicationTokens(vector<shared_ptr<Application>> & applic
         systemApplicationName = getSystemApplicationName(applicationToken);
 
         if (systemApplicationName == NULL_APP_NAME) {
-            this->controllerPimpl->model->emitError(Event::EventError::BAD_APPLICATION_NAME, applicationToken);
+            this->controllerPimpl->model->emitError(Event::EventError::INVALID_APPLICATION_NAME, applicationToken);
             return ERROR;
         }
 
@@ -180,12 +188,23 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
 }
 
 bool Controller::validNumberInput(string input, int min, int max) {
+    bool parsedInput = false;
     int inputValue = -1;
     try {
         inputValue = stoi(input);
-    } catch (...) {
-        return false;
+        parsedInput = true;
+    } catch (...) {}
+
+    bool validNumber = false;
+    
+    if (parsedInput) {
+        validNumber = inputValue >= min && inputValue <= max;
     }
 
-    return inputValue >= min && inputValue <= max;
+    if (!parsedInput || !validNumber) {
+        this->controllerPimpl->model->emitError(Event::EventError::INVALID_NUMBER_INPUT);
+        return ERROR;
+    }
+    
+    return VALID;
 }
