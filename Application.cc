@@ -18,7 +18,11 @@ Application::Application(string appName, ApplicationPosition position, DisplayDi
 
 Application::~Application() {}
 
+//TODO: if application is already running, then create a new window instead
+// be able to know if it is new window or new document, etc
 void Application::open() {
+    cout << "Application::open..." << endl;
+    ScriptService::isApplicationRunning(this->applicationPimpl->name);
     string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
     ScriptService::executeCommand(command);
 }
@@ -76,7 +80,7 @@ void Application::setupApplication() {
         putInPosition();
         bringToFront();
 
-        open();
+        // open();
         putInPosition();
         bringToFront();
     }

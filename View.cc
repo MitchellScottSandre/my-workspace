@@ -74,7 +74,7 @@ void View::getDesktopSetupInput() {
     string input;
     getline(cin, input);
 
-    viewPimpl->controller->parseWorkspaceInput(input);
+    viewPimpl->controller->parseWorkspaceInput(input, false);
 }
 
 void View::getExistingWorkspaceInput() {

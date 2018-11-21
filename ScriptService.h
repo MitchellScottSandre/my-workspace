@@ -15,5 +15,6 @@ public:
     static void delay(int duration);
     static void switchDesktops(DesktopDirection direction);
     static DisplayDimensions getDisplayDimensions();
+    static bool isApplicationRunning(std::string appName);
 };
 #endif

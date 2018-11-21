@@ -38,12 +38,14 @@ void Controller::receivedMenuInput(string input) {
     }
 }
 
-void Controller::parseWorkspaceInput(string input) {
+void Controller::parseWorkspaceInput(string input, bool isExistingWorkspace) {
     bool validDesktopSetup = validDesktopSetupInput(input);
 
     if (validDesktopSetup == VALID) {
         this->controllerPimpl->model->setupWorkspace();
-        this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
+        if (!isExistingWorkspace) {
+            this->controllerPimpl->model->emitEvent(Event::EventType::ASK_TO_SAVE_WORKSPACE);
+        }
     } else {
         this->controllerPimpl->model->emitEvent(Event(Event::EventType::GET_MENU_INPUT));
     }
@@ -65,7 +67,7 @@ void Controller::receivedLoadExistingWorkspaceInput(string input) {
 
     if (validExistingWorkspaceInput == VALID) {
         int inputValue = stoi(input);
-        parseWorkspaceInput(this->controllerPimpl->model->getExistingWorkspaces().at(inputValue));
+        parseWorkspaceInput(this->controllerPimpl->model->getExistingWorkspaces().at(inputValue), true);
     } else {
         this->controllerPimpl->model->emitEvent(Event::GET_EXISTING_WORKSPACE_INPUT);
     }

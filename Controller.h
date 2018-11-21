@@ -28,7 +28,7 @@ public:
     ~Controller();
 
     void receivedMenuInput(std::string input);
-    void parseWorkspaceInput(std::string input);
+    void parseWorkspaceInput(std::string input, bool isExistingWorkspace); //TODO: create static const bool for this
     void receivedSaveWorkspaceMenuInput(std::string input);
     void receivedLoadExistingWorkspaceInput(std::string input);
 };

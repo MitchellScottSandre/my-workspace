@@ -6,6 +6,15 @@
 #include "DisplayDimensions.h"
 using namespace std;
 
+bool ScriptService::isApplicationRunning(string appName) {
+    string command = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
+    string output = ScriptService::executeCommand(command);
+    cout << "isApplicationRunning(" + appName + ") ==> " + output;
+
+    if (output == "true") return true;
+    return false;
+}
+
 // This function taken from https://www.jeremymorgan.com/tutorials/c-programming/how-to-capture-the-output-of-a-linux-command-in-c/
 string ScriptService::executeCommand(string cmd) {
     string data;

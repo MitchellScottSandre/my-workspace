@@ -9,5 +9,6 @@ int main( int argc, char * argv[] ) {
     View view(controller, model);
     model->attach(&view);
     model->run();
+    // model->detach(&view); //TODO:
     return 0;
 }
