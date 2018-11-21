@@ -21,6 +21,7 @@ TODO:
 - [ ] proper code citation
 - [ ] sort imports alphabetically
 - [ ] clean up code. comments
+- [ ] open safari/chrome/firefox to specific url page
 //TextEdit: make new document
 //GoogleChrome: make new window
 

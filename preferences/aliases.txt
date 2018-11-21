@@ -1,0 +1,2 @@
+ALIAS["Code":"Visual Studio Code"]
+ALIAS["Chrome":"Google Chrome"]

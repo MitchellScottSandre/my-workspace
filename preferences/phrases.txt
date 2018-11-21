@@ -1,0 +1,1 @@
+OPEN_PHRASE["TextEdit":"New Document"]

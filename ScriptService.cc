@@ -15,7 +15,7 @@ bool ScriptService::isApplicationRunning(string appName) {
     return false;
 }
 
-// This function taken from https://www.jeremymorgan.com/tutorials/c-programming/how-to-capture-the-output-of-a-linux-command-in-c/
+// This function is taken from https://www.jeremymorgan.com/tutorials/c-programming/how-to-capture-the-output-of-a-linux-command-in-c/
 string ScriptService::executeCommand(string cmd) {
     string data;
     FILE * stream;
