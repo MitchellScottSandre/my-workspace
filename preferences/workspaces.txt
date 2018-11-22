@@ -1,1 +1,2 @@
 WORKSPACE[ Notes | Stocks ||]
+WORKSPACE[ Google Chrome ||]

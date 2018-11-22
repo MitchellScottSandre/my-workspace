@@ -1,3 +1,4 @@
+#include <map>
 #include "Controller.h"
 #include "SmartOpen.h"
 #include "View.h"
@@ -6,7 +7,6 @@
 #include "DisplayDimensions.h"
 #include "Desktop.h"
 #include "Application.h"
-#include "Alias.h"
 using namespace std;
 
 const string Controller::NULL_APP_NAME = "NULL_APP_NAME";
@@ -163,14 +163,12 @@ string Controller::getSystemApplicationName(string applicationToken) {
         }
     }
 
-    const vector<shared_ptr<Alias>> ALIASES = this->controllerPimpl->model->getAliases();
+    const map<string, string> ALIASES = this->controllerPimpl->model->getAliases();
 
-    for (auto it = ALIASES.begin(); it != ALIASES.end(); ++it) {
-        if ((*it)->isValid() == ERROR) continue;
-        
-        if (StringUtils::str_tolower((*it)->getAlias()) == StringUtils::str_tolower(applicationToken)) {
-            return (*it)->getSystemApplicationName();
-        }
+    auto it = ALIASES.find(StringUtils::str_tolower(applicationToken));
+
+    if (it != ALIASES.end()) {
+        return it->second;
     }
 
     return NULL_APP_NAME;
@@ -191,8 +189,8 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
 
 // TODO: should use a map. need to delete alias as well. need to be able to parse the ["":""] text too
 string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
-    vector<string> ALTERNATE_OPEN_PHRASES = this->controllerPimpl->model->getAlternateOpenPhrases();
-    // size_t foundIndex = std::find(ALTERNATE_OPEN_PHRASES.begin(), ALTERNATE_OPEN_PHRASES.end(), )
+    map<string, string> ALTERNATE_OPEN_PHRASES = this->controllerPimpl->model->getAlternateOpenPhrases();
+    
 }
 
 bool Controller::validNumberInput(string input, int min, int max) {

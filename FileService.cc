@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "FileService.h"
-#include "Alias.h"
+#include "StringUtils.h"
 using namespace std;
 
 const string FileService::ALIASES_FILE_NAME = "preferences/aliases.txt";
@@ -18,22 +18,16 @@ FileService::~FileService() {}
  *            Public Methods           *
  ***************************************/
 
-vector<shared_ptr<Alias>> FileService::readAliases() {
-    vector<string> aliasTokens = FileService::readTokenLines(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME);
-    vector<shared_ptr<Alias>> aliases;
-    for (string aliasToken : aliasTokens) {
-        aliases.emplace_back(make_shared<Alias>(aliasToken));
-    }
-
-    return aliases;
- }
+map<string, string> FileService::readAliases() {
+    return FileService::createMapOfTokens(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME);
+}
 
 vector<string> FileService::readWorkspaces() {
     return FileService::readTokenLines(FileService::WORKSPACE_TOKEN, FileService::WORKSPACES_FILE_NAME);
 }
 
-vector<string> FileService::readOpenPhrases() {
-    return FileService::readTokenLines(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME);
+map<string, string> FileService::readOpenPhrases() {
+    return FileService::createMapOfTokens(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME);
 }
 
 void FileService::createWorkspace(string workspace) {
@@ -42,9 +36,19 @@ void FileService::createWorkspace(string workspace) {
     file << "\n" << FileService::WORKSPACE_TOKEN << "[" << workspace << "]";
 }
 
-/***************************************
- *            Private Methods          *
- ***************************************/
+map<string, string> FileService::createMapOfTokens(string token, string fileName) {
+    map<string, string> map;
+    vector<string> tokens = FileService::readTokenLines(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME);
+
+    for (string token : tokens) {
+        pair<string, string> kvp = FileService::parseKeyAndValue(token);
+        if (kvp.first != "" && kvp.second != "") {
+            map.insert(kvp);
+        }
+    }
+
+    return map;
+}
 
 vector<string> FileService::readTokenLines(string token, string fileName) {
     vector<string> tokens;
@@ -71,4 +75,16 @@ vector<string> FileService::readTokenLines(string token, string fileName) {
 bool FileService::fileExists(string fileName) {
     ifstream inputStream(fileName.c_str());
     return inputStream.good();
+}
+
+pair<string, string> FileService::parseKeyAndValue(string token) {
+    string key = "";
+    string value = "";
+    int colonIndex = token.find(":");
+    if (colonIndex != string::npos) {
+        key = StringUtils::str_tolower(token.substr(1, colonIndex - 2));
+        value = token.substr(colonIndex + 2, token.length() - colonIndex - 3);
+    }
+
+    return pair<string, string>(key, value);
 }

@@ -18,7 +18,10 @@
         "ostream": "cpp",
         "sstream": "cpp",
         "set": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "utility": "cpp",
+        "map": "cpp",
+        "__tree": "cpp"
     },
     "files.exclude": {
         "*.d": true,

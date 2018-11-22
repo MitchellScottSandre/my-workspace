@@ -6,7 +6,6 @@
 #include "ScriptService.h"
 #include "DisplayDimensions.h"
 #include "FileService.h"
-#include "Alias.h"
 using namespace std;
 
 struct SmartOpen::SmartOpenImpl {
@@ -14,8 +13,8 @@ struct SmartOpen::SmartOpenImpl {
     vector<shared_ptr<Desktop>> desktops;
     const vector<string> APPLICATION_NAMES; 
     const vector<string> SAVED_WORKSPACES;
-    const vector<string> ALTERNATE_OPEN_PHRASES;
-    const vector<shared_ptr<Alias>> APPLICATION_ALIASES;
+    const map<string, string> ALTERNATE_OPEN_PHRASES;
+    const map<string, string> APPLICATION_ALIASES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
     SmartOpenImpl() : 
@@ -87,7 +86,7 @@ vector<string> SmartOpen::getExistingWorkspaces() {
     return this->smartOpenPimpl->SAVED_WORKSPACES;
 }
 
-vector<string> SmartOpen::getAlternateOpenPhrases() {
+map<string, string> SmartOpen::getAlternateOpenPhrases() {
     return this->smartOpenPimpl->ALTERNATE_OPEN_PHRASES;
 }
 
@@ -95,7 +94,7 @@ DisplayDimensions SmartOpen::getDisplayDimensions() {
     return this->smartOpenPimpl->DISPLAY_DIMENSIONS;
 }
 
-vector<shared_ptr<Alias>> SmartOpen::getAliases() {
+map<string, string> SmartOpen::getAliases() {
     return this->smartOpenPimpl->APPLICATION_ALIASES;
 }
 

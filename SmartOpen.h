@@ -4,10 +4,10 @@
 #include <vector>
 #include <memory>
 #include <vector>
+#include <map>
 #include "Subject.h"
 #include "Event.h"
 
-class Alias;
 class Desktop;
 class DisplayDimensions;
 
@@ -31,8 +31,8 @@ public:
 
     std::vector<std::string> getApplicationNames();
     std::vector<std::string> getExistingWorkspaces();
-    std::vector<std::string> getAlternateOpenPhrases();
-    std::vector<std::shared_ptr<Alias>> getAliases();
+    std::map<std::string, std::string> getAlternateOpenPhrases();
+    std::map<std::string, std::string> getAliases();
     DisplayDimensions getDisplayDimensions();
 };
 
