@@ -14,10 +14,6 @@ const string FileService::OPEN_PHRASES_TOKEN = "OPEN_PHRASE";
 FileService::FileService() {}
 FileService::~FileService() {}
 
-/***************************************
- *            Public Methods           *
- ***************************************/
-
 map<string, string> FileService::readAliases() {
     return FileService::createMapOfTokens(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME, true);
 }

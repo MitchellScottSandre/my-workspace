@@ -175,6 +175,7 @@ string Controller::getSystemApplicationName(string applicationToken) {
 }
 
 shared_ptr<Application> Controller::createApplication(string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex) {
+    // TODO: do something with this
     getAlternateApplicationOpenPhrase(systemAppName);
     if (numTokensInDesktop == 1) {
         Application::ApplicationPosition position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
@@ -196,6 +197,8 @@ string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
         cout << "FOUND ALTERNATE OPEN PHRASE: " << it->first << " " << it->second << endl;
         return it->second;
     }
+
+    return "";
 }
 
 bool Controller::validNumberInput(string input, int min, int max) {
