@@ -1,2 +1,3 @@
 WORKSPACE[ Notes | Stocks ||]
 WORKSPACE[ Google Chrome ||]
+WORKSPACE[ TextEdit ||]

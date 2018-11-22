@@ -15,8 +15,8 @@ public:
     static const std::string OPEN_PHRASES_TOKEN;
 
     static bool fileExists(std::string fileName);
-    static std::pair<std::string, std::string> parseKeyAndValue(std::string token);
-    static std::map<std::string, std::string> createMapOfTokens(std::string token, std::string fileName);
+    static std::pair<std::string, std::string> parseKeyAndValue(std::string token, bool lowercaseKey);
+    static std::map<std::string, std::string> createMapOfTokens(std::string token, std::string fileName, bool lowercaseKey);
     static std::vector<std::string> readTokenLines(std::string token, std::string fileName);
 
     FileService();

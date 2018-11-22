@@ -19,7 +19,7 @@ FileService::~FileService() {}
  ***************************************/
 
 map<string, string> FileService::readAliases() {
-    return FileService::createMapOfTokens(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME);
+    return FileService::createMapOfTokens(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME, true);
 }
 
 vector<string> FileService::readWorkspaces() {
@@ -27,7 +27,7 @@ vector<string> FileService::readWorkspaces() {
 }
 
 map<string, string> FileService::readOpenPhrases() {
-    return FileService::createMapOfTokens(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME);
+    return FileService::createMapOfTokens(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME, false);
 }
 
 void FileService::createWorkspace(string workspace) {
@@ -36,13 +36,15 @@ void FileService::createWorkspace(string workspace) {
     file << "\n" << FileService::WORKSPACE_TOKEN << "[" << workspace << "]";
 }
 
-map<string, string> FileService::createMapOfTokens(string token, string fileName) {
+map<string, string> FileService::createMapOfTokens(string token, string fileName, bool lowercaseKey) {
     map<string, string> map;
-    vector<string> tokens = FileService::readTokenLines(FileService::ALIAS_TOKEN, FileService::ALIASES_FILE_NAME);
+    vector<string> tokens = FileService::readTokenLines(token, fileName);
 
     for (string token : tokens) {
-        pair<string, string> kvp = FileService::parseKeyAndValue(token);
+        cout << "token is: " << token << endl;
+        pair<string, string> kvp = FileService::parseKeyAndValue(token, lowercaseKey);
         if (kvp.first != "" && kvp.second != "") {
+            cout << "KVP is (" << kvp.first << ", " << kvp.second << ")" << endl;
             map.insert(kvp);
         }
     }
@@ -77,12 +79,12 @@ bool FileService::fileExists(string fileName) {
     return inputStream.good();
 }
 
-pair<string, string> FileService::parseKeyAndValue(string token) {
+pair<string, string> FileService::parseKeyAndValue(string token, bool lowercaseKey) {
     string key = "";
     string value = "";
     int colonIndex = token.find(":");
     if (colonIndex != string::npos) {
-        key = StringUtils::str_tolower(token.substr(1, colonIndex - 2));
+        key = lowercaseKey ? StringUtils::str_tolower(token.substr(1, colonIndex - 2)) : token.substr(1, colonIndex - 2);
         value = token.substr(colonIndex + 2, token.length() - colonIndex - 3);
     }
 

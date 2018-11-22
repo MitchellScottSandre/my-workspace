@@ -175,6 +175,7 @@ string Controller::getSystemApplicationName(string applicationToken) {
 }
 
 shared_ptr<Application> Controller::createApplication(string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex) {
+    getAlternateApplicationOpenPhrase(systemAppName);
     if (numTokensInDesktop == 1) {
         Application::ApplicationPosition position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
         return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions());
@@ -187,10 +188,14 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
     }
 }
 
-// TODO: should use a map. need to delete alias as well. need to be able to parse the ["":""] text too
 string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
     map<string, string> ALTERNATE_OPEN_PHRASES = this->controllerPimpl->model->getAlternateOpenPhrases();
-    
+    auto it = ALTERNATE_OPEN_PHRASES.find(systemAppName);
+
+    if (it != ALTERNATE_OPEN_PHRASES.end()) {
+        cout << "FOUND ALTERNATE OPEN PHRASE: " << it->first << " " << it->second << endl;
+        return it->second;
+    }
 }
 
 bool Controller::validNumberInput(string input, int min, int max) {
