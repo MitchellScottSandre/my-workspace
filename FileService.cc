@@ -6,9 +6,10 @@ using namespace std;
 
 const string FileService::ALIASES_FILE_NAME = "preferences/aliases.txt";
 const string FileService::WORKSPACES_FILE_NAME = "preferences/workspaces.txt";
-const string FileService::OPEN_PHRASES_FILE_NAME = "preferences/phrases.txt";
+const string FileService::OPEN_PHRASES_FILE_NAME = "preferences/openPhrases.txt";
 const string FileService::ALIAS_TOKEN = "ALIAS"; 
 const string FileService::WORKSPACE_TOKEN = "WORKSPACE"; 
+const string FileService::OPEN_PHRASES_TOKEN = "OPEN_PHRASE"; 
 
 FileService::FileService() {}
 FileService::~FileService() {}
@@ -31,6 +32,9 @@ vector<string> FileService::readWorkspaces() {
     return FileService::readTokenLines(FileService::WORKSPACE_TOKEN, FileService::WORKSPACES_FILE_NAME);
 }
 
+vector<string> FileService::readOpenPhrases() {
+    return FileService::readTokenLines(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME);
+}
 
 void FileService::createWorkspace(string workspace) {
     fstream file;

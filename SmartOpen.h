@@ -31,6 +31,7 @@ public:
 
     std::vector<std::string> getApplicationNames();
     std::vector<std::string> getExistingWorkspaces();
+    std::vector<std::string> getAlternateOpenPhrases();
     std::vector<std::shared_ptr<Alias>> getAliases();
     DisplayDimensions getDisplayDimensions();
 };

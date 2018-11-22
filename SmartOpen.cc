@@ -14,6 +14,7 @@ struct SmartOpen::SmartOpenImpl {
     vector<shared_ptr<Desktop>> desktops;
     const vector<string> APPLICATION_NAMES; 
     const vector<string> SAVED_WORKSPACES;
+    const vector<string> ALTERNATE_OPEN_PHRASES;
     const vector<shared_ptr<Alias>> APPLICATION_ALIASES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
@@ -21,6 +22,7 @@ struct SmartOpen::SmartOpenImpl {
         currentEvent{Event()}, 
         APPLICATION_NAMES{ScriptService::getApplicationNames()},
         SAVED_WORKSPACES{FileService::readWorkspaces()},
+        ALTERNATE_OPEN_PHRASES{FileService::readOpenPhrases()},
         APPLICATION_ALIASES{FileService::readAliases()},
         DISPLAY_DIMENSIONS{ScriptService::getDisplayDimensions()} {}
 };
@@ -83,6 +85,10 @@ vector<string> SmartOpen::getApplicationNames() {
 
 vector<string> SmartOpen::getExistingWorkspaces() {
     return this->smartOpenPimpl->SAVED_WORKSPACES;
+}
+
+vector<string> SmartOpen::getAlternateOpenPhrases() {
+    return this->smartOpenPimpl->ALTERNATE_OPEN_PHRASES;
 }
 
 DisplayDimensions SmartOpen::getDisplayDimensions() {

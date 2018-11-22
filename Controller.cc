@@ -189,6 +189,12 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
     }
 }
 
+// TODO: should use a map. need to delete alias as well. need to be able to parse the ["":""] text too
+string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
+    vector<string> ALTERNATE_OPEN_PHRASES = this->controllerPimpl->model->getAlternateOpenPhrases();
+    // size_t foundIndex = std::find(ALTERNATE_OPEN_PHRASES.begin(), ALTERNATE_OPEN_PHRASES.end(), )
+}
+
 bool Controller::validNumberInput(string input, int min, int max) {
     bool parsedInput = false;
     int inputValue = -1;

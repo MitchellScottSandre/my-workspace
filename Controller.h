@@ -23,6 +23,7 @@ class Controller {
     bool validNumberInput(std::string input, int min, int max);
     std::string getSystemApplicationName(std::string applicationToken);
     std::shared_ptr<Application> createApplication(std::string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex);
+    std::string getAlternateApplicationOpenPhrase(std::string systemAppName);
 public:
     Controller(std::shared_ptr<SmartOpen> m);
     ~Controller();
