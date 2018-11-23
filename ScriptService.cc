@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>      
-#include <istream>      
+#include <istream>    
 #include "ScriptService.h"
 #include "StringUtils.h"
 #include "DisplayDimensions.h"
@@ -9,9 +9,9 @@ using namespace std;
 bool ScriptService::isApplicationRunning(string appName) {
     string command = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
     string output = ScriptService::executeCommand(command);
-    cout << "isApplicationRunning(" + appName + ") ==> " + output;
+    cout << "isApplicationRunning(" + appName + ") ==>|" + output << "|" << endl;
 
-    if (output == "true") return true;
+    if (output.find("true") != string::npos) return true;
     return false;
 }
 

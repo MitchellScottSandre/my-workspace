@@ -175,18 +175,18 @@ string Controller::getSystemApplicationName(string applicationToken) {
 }
 
 shared_ptr<Application> Controller::createApplication(string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex) {
-    // TODO: do something with this
-    getAlternateApplicationOpenPhrase(systemAppName);
+    Application::ApplicationPosition position;
     if (numTokensInDesktop == 1) {
-        Application::ApplicationPosition position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
-        return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions());
+        position = fullScreen ? Application::ApplicationPosition::FULL_SCREEN : Application::ApplicationPosition::MIDDLE;
     } else {
         if (tokenIndex == Application::LEFT_INDEX) {
-            return make_shared<Application>(systemAppName, Application::ApplicationPosition::LEFT, this->controllerPimpl->model->getDisplayDimensions());
+            position = Application::ApplicationPosition::LEFT;
         } else {
-            return make_shared<Application>(systemAppName, Application::ApplicationPosition::RIGHT, this->controllerPimpl->model->getDisplayDimensions());
+            position = Application::ApplicationPosition::RIGHT;
         }
     }
+
+    return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions(), getAlternateApplicationOpenPhrase(systemAppName));
 }
 
 string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {

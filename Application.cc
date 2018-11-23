@@ -8,22 +8,49 @@ struct Application::ApplicationImpl {
     string name;
     ApplicationPosition position;
     DisplayDimensions displayDimensions;
+    string alternateOpenPhrase;
 
-    ApplicationImpl(string appName, ApplicationPosition position, DisplayDimensions displayDimensions) :
-        name{appName}, position{position}, displayDimensions{displayDimensions} {}
+    ApplicationImpl(string appName, ApplicationPosition position, DisplayDimensions displayDimensions, string alternateOpenPhrase) :
+        name{appName}, position{position}, displayDimensions{displayDimensions}, alternateOpenPhrase{alternateOpenPhrase == "" ? "New Window" : alternateOpenPhrase} {}
 };
 
-Application::Application(string appName, ApplicationPosition position, DisplayDimensions displayDimensions) :
-    applicationPimpl{make_unique<ApplicationImpl>(appName, position, displayDimensions)} {}
+Application::Application(string appName, ApplicationPosition position, DisplayDimensions displayDimensions, string alternateOpenPhrase) :
+    applicationPimpl{make_unique<ApplicationImpl>(appName, position, displayDimensions, alternateOpenPhrase)} {}
 
 Application::~Application() {}
 
 //TODO: if application is already running, then create a new window instead
 // be able to know if it is new window or new document, etc
 void Application::open() {
-    cout << "Application::open..." << endl;
-    ScriptService::isApplicationRunning(this->applicationPimpl->name);
-    string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
+    if (ScriptService::isApplicationRunning(this->applicationPimpl->name)) {
+        cout << "Application already open" << endl;
+        openWithAlternatePhrase();
+    } else {
+        cout << "Application::open >> normal" << endl;
+        string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
+        ScriptService::executeCommand(command);
+    }
+}
+
+void Application::openWithAlternatePhrase() {
+    string l1 = "tell application \"System Events\"\n";
+    string l2 = "tell application process \"Dock\"\n";
+    string l3 = "tell list 1\n";
+    string l4 = "tell UI element \"" + this->applicationPimpl->name + "\"\n";
+    string l5 = "perform action \"AXShowMenu\"\n";
+    string l6 = "tell menu\"" + this->applicationPimpl->name + "\"\n";
+    string l7 = "tell menu item \"" + this->applicationPimpl->alternateOpenPhrase + "\"\n";
+    string l8 = "perform action \"AXPress\"\n";
+    string l9 = "end tell\n";
+    string l10 = "end tell\n";
+    string l11 = "end tell\n";
+    string l12 = "end tell\n";
+    string l13 = "end tell\n";
+    string l14 = "end tell\n";
+
+    string innerCommand = l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8 + l9 + l10 + l11 + l12 + l13 + l14;
+    string command = "osascript -e '" + innerCommand + "'";
+    cout << innerCommand << endl;
     ScriptService::executeCommand(command);
 }
 
@@ -78,11 +105,11 @@ void Application::setupApplication() {
     } else {
         open();
         putInPosition();
-        bringToFront();
+        // bringToFront();
 
         // open();
         putInPosition();
-        bringToFront();
+        // bringToFront();
     }
 }
 
