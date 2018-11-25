@@ -21,7 +21,8 @@
         "istream": "cpp",
         "utility": "cpp",
         "map": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "iterator": "cpp"
     },
     "files.exclude": {
         "*.d": true,

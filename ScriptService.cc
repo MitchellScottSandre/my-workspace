@@ -6,8 +6,8 @@
 #include "DisplayDimensions.h"
 using namespace std;
 
-bool ScriptService::isApplicationRunning(string processName) {
-    string command = "osascript -e 'application\"" + processName + "\" is running'";
+bool ScriptService::isApplicationRunning(string appName) {
+    string command = "osascript -e 'application\"" + appName + "\" is running'";
     string output = ScriptService::executeCommand(command);
     cout << command << endl;
     if (output.find("true") != string::npos) return true;

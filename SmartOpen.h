@@ -33,7 +33,6 @@ public:
     std::vector<std::string> getExistingWorkspaces();
     std::map<std::string, std::string> getAlternateOpenPhrases();
     std::map<std::string, std::string> getAliases();
-    std::map<std::string, std::string> getProcessNames();
     DisplayDimensions getDisplayDimensions();
 };
 

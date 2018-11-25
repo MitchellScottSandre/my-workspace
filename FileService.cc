@@ -7,12 +7,10 @@ using namespace std;
 const string FileService::ALIASES_FILE_NAME = "preferences/aliases.txt";
 const string FileService::WORKSPACES_FILE_NAME = "preferences/workspaces.txt";
 const string FileService::OPEN_PHRASES_FILE_NAME = "preferences/openPhrases.txt";
-const string FileService::PROCESS_NAMES_FILE_NAME = "preferences/processNames.txt";
 
 const string FileService::ALIAS_TOKEN = "ALIAS"; 
 const string FileService::WORKSPACE_TOKEN = "WORKSPACE"; 
 const string FileService::OPEN_PHRASES_TOKEN = "OPEN_PHRASE"; 
-const string FileService::PROCES_NAMES_TOKEN = "PROCESS_NAME"; 
 
 FileService::FileService() {}
 FileService::~FileService() {}
@@ -23,10 +21,6 @@ map<string, string> FileService::readAliases() {
 
 map<string, string> FileService::readOpenPhrases() {
     return FileService::createMapOfTokens(FileService::OPEN_PHRASES_TOKEN, FileService::OPEN_PHRASES_FILE_NAME, FileService::KEY_REGULAR);
-}
-
-map<string, string> FileService::readProcessNames() {
-    return FileService::createMapOfTokens(FileService::PROCES_NAMES_TOKEN, FileService::PROCESS_NAMES_FILE_NAME, FileService::KEY_REGULAR);
 }
 
 vector<string> FileService::readWorkspaces() {

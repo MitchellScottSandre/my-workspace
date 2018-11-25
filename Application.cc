@@ -7,25 +7,23 @@ using namespace std;
 struct Application::ApplicationImpl {
     string name;
     string alternateOpenPhrase;
-    string processName;
     ApplicationPosition position;
     DisplayDimensions displayDimensions;
     
-    ApplicationImpl(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    ApplicationImpl(string appName, string alternateOpenPhrase, ApplicationPosition position, DisplayDimensions displayDimensions) :
         name{appName}, 
         alternateOpenPhrase{alternateOpenPhrase == "" ? "New Window" : alternateOpenPhrase}, 
-        processName{processName}, 
         position{position}, 
         displayDimensions{displayDimensions} { }
 };
 
-Application::Application(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
-    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, processName, position, displayDimensions)} {}
+Application::Application(string appName, string alternateOpenPhrase, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, position, displayDimensions)} {}
 
 Application::~Application() {}
 
 void Application::open() {
-    if (ScriptService::isApplicationRunning(this->applicationPimpl->processName)) {
+    if (ScriptService::isApplicationRunning(this->applicationPimpl->name)) {
         cout << "Application already open" << endl;
         openWithAlternatePhrase();
     } else {
