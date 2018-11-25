@@ -186,7 +186,11 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
         }
     }
 
-    return make_shared<Application>(systemAppName, position, this->controllerPimpl->model->getDisplayDimensions(), getAlternateApplicationOpenPhrase(systemAppName));
+    string alternateOpenPhrase = getAlternateApplicationOpenPhrase(systemAppName);
+    string processName = systemAppName;
+    DisplayDimensions displayDimensions = this->controllerPimpl->model->getDisplayDimensions();
+
+    return make_shared<Application>(systemAppName, alternateOpenPhrase, processName, position, displayDimensions);
 }
 
 string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
@@ -194,11 +198,21 @@ string Controller::getAlternateApplicationOpenPhrase(string systemAppName) {
     auto it = ALTERNATE_OPEN_PHRASES.find(systemAppName);
 
     if (it != ALTERNATE_OPEN_PHRASES.end()) {
-        cout << "FOUND ALTERNATE OPEN PHRASE: " << it->first << " " << it->second << endl;
         return it->second;
     }
 
     return "";
+}
+
+string Controller::getProcessName(string systemAppName) {
+    map<string, string> PROCESS_NAMES = this->controllerPimpl->model->getProcessNames();
+    auto it = PROCESS_NAMES.find(systemAppName);
+
+    if (it != PROCESS_NAMES.end()) {
+        return it->second;
+    }
+
+    return systemAppName;
 }
 
 bool Controller::validNumberInput(string input, int min, int max) {

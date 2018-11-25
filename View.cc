@@ -51,7 +51,7 @@ void View::getNotified() {
 }
 
 void View::displayWelcome() {
-    cout << "displayWelcome" << endl;
+    cout << "Welcome to MyWorkspace!" << endl;
 }
 
 void View::getMenuInput() {

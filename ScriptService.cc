@@ -6,11 +6,10 @@
 #include "DisplayDimensions.h"
 using namespace std;
 
-bool ScriptService::isApplicationRunning(string appName) {
-    string command = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
+bool ScriptService::isApplicationRunning(string processName) {
+    string command = "osascript -e 'application\"" + processName + "\" is running'";
     string output = ScriptService::executeCommand(command);
-    cout << "isApplicationRunning(" + appName + ") ==>|" + output << "|" << endl;
-
+    cout << command << endl;
     if (output.find("true") != string::npos) return true;
     return false;
 }

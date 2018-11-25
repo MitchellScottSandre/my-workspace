@@ -24,6 +24,7 @@ class Controller {
     std::string getSystemApplicationName(std::string applicationToken);
     std::shared_ptr<Application> createApplication(std::string systemAppName, bool fullScreen, int numTokensInDesktop, int tokenIndex);
     std::string getAlternateApplicationOpenPhrase(std::string systemAppName);
+    std::string getProcessName(std::string systemAppName);
 public:
     Controller(std::shared_ptr<SmartOpen> m);
     ~Controller();

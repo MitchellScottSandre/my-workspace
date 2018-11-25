@@ -6,23 +6,26 @@ using namespace std;
 
 struct Application::ApplicationImpl {
     string name;
+    string alternateOpenPhrase;
+    string processName;
     ApplicationPosition position;
     DisplayDimensions displayDimensions;
-    string alternateOpenPhrase;
-
-    ApplicationImpl(string appName, ApplicationPosition position, DisplayDimensions displayDimensions, string alternateOpenPhrase) :
-        name{appName}, position{position}, displayDimensions{displayDimensions}, alternateOpenPhrase{alternateOpenPhrase == "" ? "New Window" : alternateOpenPhrase} {}
+    
+    ApplicationImpl(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
+        name{appName}, 
+        alternateOpenPhrase{alternateOpenPhrase == "" ? "New Window" : alternateOpenPhrase}, 
+        processName{processName}, 
+        position{position}, 
+        displayDimensions{displayDimensions} { }
 };
 
-Application::Application(string appName, ApplicationPosition position, DisplayDimensions displayDimensions, string alternateOpenPhrase) :
-    applicationPimpl{make_unique<ApplicationImpl>(appName, position, displayDimensions, alternateOpenPhrase)} {}
+Application::Application(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, processName, position, displayDimensions)} {}
 
 Application::~Application() {}
 
-//TODO: if application is already running, then create a new window instead
-// be able to know if it is new window or new document, etc
 void Application::open() {
-    if (ScriptService::isApplicationRunning(this->applicationPimpl->name)) {
+    if (ScriptService::isApplicationRunning(this->applicationPimpl->processName)) {
         cout << "Application already open" << endl;
         openWithAlternatePhrase();
     } else {
@@ -52,10 +55,11 @@ void Application::openWithAlternatePhrase() {
     string command = "osascript -e '" + innerCommand + "'";
     cout << innerCommand << endl;
     ScriptService::executeCommand(command);
+    ScriptService::delay(1);
 }
 
 void Application::putInPosition() {
-    string loation = "";
+    string location = "";
     string size = "";
     string halfWidth = to_string(this->applicationPimpl->displayDimensions.getWidth() / 2);
     string height = to_string(this->applicationPimpl->displayDimensions.getHeight());
@@ -63,26 +67,28 @@ void Application::putInPosition() {
 
     switch (this->applicationPimpl->position) {
         case Application::ApplicationPosition::LEFT:
-            loation = "{0, 0}";
+            location = "{0, 0}";
             size = "{" + halfWidth + ", " + height + "}";
             break;
         case Application::ApplicationPosition::MIDDLE:
-            loation = "{0, 0}";
+            location = "{0, 0}";
             size = "{" + width + ", " + height + "}";
             break;
         case Application::ApplicationPosition::RIGHT:
-            loation = "{" + halfWidth + ", 0}";
+            location = "{" + halfWidth + ", 0}";
             size = "{" + halfWidth + ", " + height + "}";
             break;
         default:
             break;
     }
 
-    string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + loation + "'";
+    string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + location + "'";
     string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + size + "'";
     
     ScriptService::executeCommand(command1);
     ScriptService::executeCommand(command2);
+    cout << command1 << endl;
+    cout << command2 << endl;
 }
 
 void Application::bringToFront() {
@@ -92,7 +98,6 @@ void Application::bringToFront() {
 
 void Application::setFullScreen() {
     string command2 = "osascript -e 'tell application \"System Events\" to keystroke \"f\" using {command down, control down}'";
-    cout << command2 << endl;
     ScriptService::executeCommand(command2);
 }
 
@@ -105,11 +110,10 @@ void Application::setupApplication() {
     } else {
         open();
         putInPosition();
-        // bringToFront();
+        bringToFront();
 
-        // open();
         putInPosition();
-        // bringToFront();
+        bringToFront();
     }
 }
 

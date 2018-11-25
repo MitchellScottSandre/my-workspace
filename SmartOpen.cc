@@ -14,7 +14,8 @@ struct SmartOpen::SmartOpenImpl {
     const vector<string> APPLICATION_NAMES; 
     const vector<string> SAVED_WORKSPACES;
     const map<string, string> ALTERNATE_OPEN_PHRASES;
-    const map<string, string> APPLICATION_ALIASES;
+    const map<string, string> ALIASES;
+    const map<string, string> PROCESS_NAMES;
     const DisplayDimensions DISPLAY_DIMENSIONS; 
 
     SmartOpenImpl() : 
@@ -22,7 +23,8 @@ struct SmartOpen::SmartOpenImpl {
         APPLICATION_NAMES{ScriptService::getApplicationNames()},
         SAVED_WORKSPACES{FileService::readWorkspaces()},
         ALTERNATE_OPEN_PHRASES{FileService::readOpenPhrases()},
-        APPLICATION_ALIASES{FileService::readAliases()},
+        ALIASES{FileService::readAliases()},
+        PROCESS_NAMES{FileService::readProcessNames()},
         DISPLAY_DIMENSIONS{ScriptService::getDisplayDimensions()} {}
 };
 
@@ -90,12 +92,16 @@ map<string, string> SmartOpen::getAlternateOpenPhrases() {
     return this->smartOpenPimpl->ALTERNATE_OPEN_PHRASES;
 }
 
+map<string, string> SmartOpen::getProcessNames() {
+    return this->smartOpenPimpl->PROCESS_NAMES;
+}
+
 DisplayDimensions SmartOpen::getDisplayDimensions() {
     return this->smartOpenPimpl->DISPLAY_DIMENSIONS;
 }
 
 map<string, string> SmartOpen::getAliases() {
-    return this->smartOpenPimpl->APPLICATION_ALIASES;
+    return this->smartOpenPimpl->ALIASES;
 }
 
 /***************************************

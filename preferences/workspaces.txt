@@ -1,3 +1,5 @@
-WORKSPACE[ Notes | Stocks ||]
-WORKSPACE[ Google Chrome ||]
-WORKSPACE[ TextEdit ||]
+WORKSPACE[ Notes | TextEdit || Maps | TextEdit ||]
+WORKSPACE[ Notes | Google Chrome || Maps | Google Chrome ||]
+WORKSPACE[ Notes | Google Chrome || Maps | Stocks || Google Chrome | TextEdit ||]
+WORKSPACE[ Visual Studio Code | Google Chrome || Visual Studio Code | Google Chrome ||]
+WORKSPACE[ Google Chrome | Visual Studio Code ||]

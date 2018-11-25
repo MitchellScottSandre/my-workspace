@@ -19,7 +19,7 @@ public:
     enum ApplicationPosition { LEFT, MIDDLE, RIGHT, FULL_SCREEN };
     static const int LEFT_INDEX = 0;
     static const int RIGHT_INDEX = 1;
-    Application(std::string appName, ApplicationPosition position, DisplayDimensions displayDimensions, std::string alternateOpenPhrase);
+    Application(std::string appName, std::string alternateOpenPhrase, std::string processName, ApplicationPosition position, DisplayDimensions displayDimensions);
     ~Application();
 
     void setupApplication();
