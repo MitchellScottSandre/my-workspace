@@ -33,6 +33,7 @@ void Application::open() {
     }
 }
 
+// TODO: get Visual Studio Code working!
 void Application::openWithAlternatePhrase() {
     string l1 = "tell application \"System Events\"\n";
     string l2 = "tell application process \"Dock\"\n";
