@@ -7,27 +7,29 @@ using namespace std;
 struct Application::ApplicationImpl {
     string name;
     string alternateOpenPhrase;
+    string processName;
     ApplicationPosition position;
     DisplayDimensions displayDimensions;
     
-    ApplicationImpl(string appName, string alternateOpenPhrase, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    ApplicationImpl(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
         name{appName}, 
         alternateOpenPhrase{alternateOpenPhrase == "" ? "New Window" : alternateOpenPhrase}, 
+        processName{processName},
         position{position}, 
         displayDimensions{displayDimensions} { }
 };
 
-Application::Application(string appName, string alternateOpenPhrase, ApplicationPosition position, DisplayDimensions displayDimensions) :
-    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, position, displayDimensions)} {}
+Application::Application(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, processName, position, displayDimensions)} {}
 
 Application::~Application() {}
 
 void Application::open() {
-    if (ScriptService::isApplicationRunning(this->applicationPimpl->name)) {
-        cout << "Application already open" << endl;
+    if (ScriptService::isApplicationRunning(this->applicationPimpl->processName)) {
+        // cout << "Application already open" << endl;
         openWithAlternatePhrase();
     } else {
-        cout << "Application::open >> normal" << endl;
+        // cout << "Application::open >> normal" << endl;
         string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
         ScriptService::executeCommand(command);
     }
@@ -81,8 +83,8 @@ void Application::putInPosition() {
             break;
     }
 
-    string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + location + "'";
-    string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of application process \"" + this->applicationPimpl->name + "\" to " + size + "'";
+    string command1 = "osascript -e 'tell application \"System Events\" to set position of window 1 of process \"" + this->applicationPimpl->processName + "\" to " + location + "'";
+    string command2 = "osascript -e 'tell application \"System Events\" to set size of window 1 of process \"" + this->applicationPimpl->processName + "\" to " + size + "'";
     
     ScriptService::executeCommand(command1);
     ScriptService::executeCommand(command2);
