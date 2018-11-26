@@ -10,11 +10,18 @@ private:
     static std::string formatAppName(std::string appName);
 public:
     enum DesktopDirection { LEFT, RIGHT };
+
+    // Ensures: Executes the cmd command
+    // Returns: Terminal output of the cmd command
     static std::string executeCommand(std::string cmd);
-    static std::vector<std::string> getApplicationNames();
+
+    // Ensures: Delays terminal execution by duration in seconds
     static void delay(int duration);
+
+    // Ensures: 
     static void switchDesktops(DesktopDirection direction);
-    static DisplayDimensions getDisplayDimensions();
     static bool isApplicationRunning(std::string appName);
+    static std::vector<std::string> getApplicationNames();
+    static DisplayDimensions getDisplayDimensions();
 };
 #endif

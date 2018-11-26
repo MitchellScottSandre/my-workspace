@@ -26,16 +26,13 @@ Application::~Application() {}
 
 void Application::open() {
     if (ScriptService::isApplicationRunning(this->applicationPimpl->processName)) {
-        // cout << "Application already open" << endl;
         openWithAlternatePhrase();
     } else {
-        // cout << "Application::open >> normal" << endl;
         string command = "osascript -e 'tell application \"" + this->applicationPimpl->name + "\" \nlaunch \nend tell'";
         ScriptService::executeCommand(command);
     }
 }
 
-// TODO: get Visual Studio Code working!
 void Application::openWithAlternatePhrase() {
     string l1 = "tell application \"System Events\"\n";
     string l2 = "tell application process \"Dock\"\n";
@@ -54,7 +51,6 @@ void Application::openWithAlternatePhrase() {
 
     string innerCommand = l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8 + l9 + l10 + l11 + l12 + l13 + l14;
     string command = "osascript -e '" + innerCommand + "'";
-    cout << innerCommand << endl;
     ScriptService::executeCommand(command);
     ScriptService::delay(1);
 }
@@ -88,8 +84,6 @@ void Application::putInPosition() {
     
     ScriptService::executeCommand(command1);
     ScriptService::executeCommand(command2);
-    cout << command1 << endl;
-    cout << command2 << endl;
 }
 
 void Application::bringToFront() {

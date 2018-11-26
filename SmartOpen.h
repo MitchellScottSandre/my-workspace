@@ -19,7 +19,7 @@ private:
     bool workspaceAlreadyExists(std::string workspace);
 public:
     SmartOpen();
-    ~SmartOpen();
+    virtual ~SmartOpen();
 
     Event getLastEvent();
     void run();

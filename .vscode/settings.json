@@ -22,7 +22,8 @@
         "utility": "cpp",
         "map": "cpp",
         "__tree": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "chrono": "cpp"
     },
     "files.exclude": {
         "*.d": true,
