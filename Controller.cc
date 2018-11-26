@@ -187,7 +187,7 @@ shared_ptr<Application> Controller::createApplication(string systemAppName, bool
     }
 
     string alternateOpenPhrase = getAlternateApplicationOpenPhrase(systemAppName);
-    string processName = systemAppName;
+    string processName = getProcessName(systemAppName);
     DisplayDimensions displayDimensions = this->controllerPimpl->model->getDisplayDimensions();
 
     return make_shared<Application>(systemAppName, alternateOpenPhrase, processName, position, displayDimensions);
