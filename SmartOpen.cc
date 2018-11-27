@@ -29,6 +29,20 @@ struct SmartOpen::SmartOpenImpl {
 };
 
 /***************************************
+ *            Private Methods          *
+ ***************************************/
+
+bool SmartOpen::workspaceAlreadyExists(string workspace) {
+    for (string w : this->smartOpenPimpl->SAVED_WORKSPACES) {
+        if (w == workspace) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/***************************************
  *            Public Methods           *
  ***************************************/
 
@@ -48,14 +62,6 @@ void SmartOpen::emitEvent(Event e) {
 
 void SmartOpen::emitError(Event::EventError e, string errorMessage) {
     emitEvent(Event(Event::EventType::ERROR, e, errorMessage));
-}
-
-Event SmartOpen::getLastEvent() {
-    return this->smartOpenPimpl->currentEvent;
-}
-
-void SmartOpen::setDesktops(vector<shared_ptr<Desktop>> desktops) {
-    this->smartOpenPimpl->desktops = desktops;
 }
 
 void SmartOpen::setupWorkspace() {
@@ -80,6 +86,18 @@ void SmartOpen::saveWorkspace() {
     }
 }
 
+/***************************************
+ *        Accessors / Mutators         *
+ ***************************************/
+
+void SmartOpen::setDesktops(vector<shared_ptr<Desktop>> desktops) {
+    this->smartOpenPimpl->desktops = desktops;
+}
+
+Event SmartOpen::getLastEvent() {
+    return this->smartOpenPimpl->currentEvent;
+}
+
 vector<string> SmartOpen::getApplicationNames() {
     return this->smartOpenPimpl->APPLICATION_NAMES;
 }
@@ -92,28 +110,14 @@ map<string, string> SmartOpen::getAlternateOpenPhrases() {
     return this->smartOpenPimpl->ALTERNATE_OPEN_PHRASES;
 }
 
+map<string, string> SmartOpen::getAliases() {
+    return this->smartOpenPimpl->ALIASES;
+}
+
 map<string, string> SmartOpen::getProcessNames() {
     return this->smartOpenPimpl->PROCESS_NAMES;
 }
 
 DisplayDimensions SmartOpen::getDisplayDimensions() {
     return this->smartOpenPimpl->DISPLAY_DIMENSIONS;
-}
-
-map<string, string> SmartOpen::getAliases() {
-    return this->smartOpenPimpl->ALIASES;
-}
-
-/***************************************
- *            Private Methods          *
- ***************************************/
-
-bool SmartOpen::workspaceAlreadyExists(string workspace) {
-    for (string w : this->smartOpenPimpl->SAVED_WORKSPACES) {
-        if (w == workspace) {
-            return true;
-        }
-    }
-
-    return false;
 }

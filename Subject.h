@@ -12,10 +12,13 @@ class Subject {
     public:
         virtual ~Subject() = 0;
 
+        // Ensures: adds the Observer pointer o to observers
         void attach(Observer * o);
 
+        // Ensures: removes the Observer pointer o from observers
         void detach(Observer * o);
 
+        // Ensures: For each Observer o in observers, calls o->getNotified()
         void notifyObservers();
 };
 

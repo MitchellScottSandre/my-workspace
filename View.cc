@@ -40,7 +40,7 @@ void View::getNotified() {
             getExistingWorkspaceInput();
             break;
         case Event::EventType::ASK_TO_SAVE_WORKSPACE:
-            getSaveWorkspace();
+            getSaveWorkspaceInput();
             break;
         case Event::EventType::ERROR:
             displayError(e.error, e.data);
@@ -52,6 +52,31 @@ void View::getNotified() {
 
 void View::displayWelcome() {
     cout << "Welcome to MyWorkspace!" << endl;
+}
+
+void View::displayError(Event::EventError error, string errorMessage) {
+    string output = "";
+    switch(error) {
+        case Event::EventError::INVALID_APPLICATION_NAME:
+            output = "Invalid Application Name: " + errorMessage;
+            break;
+        case Event::EventError::TOO_MANY_APPLICATIONS:
+            output = "Can't have more than 2 applications per desktop";
+            break;
+        case Event::EventError::INVALID_FULLSCREEN:
+            output = "Can't have another application open with " + errorMessage + " in full screen";
+            break;
+        case Event::EventError::NO_SAVED_WORKSPACES:
+            output = "You don't have any saved workspaces";
+            break;
+        case Event::EventError::INVALID_NUMBER_INPUT:
+            output = "Input couldn't be parsed or was out of range";
+            break;
+        default:
+            return;
+    }
+
+    cerr << "Error: " + output << endl;
 }
 
 void View::getMenuInput() {
@@ -95,7 +120,7 @@ void View::getExistingWorkspaceInput() {
     }
 }
 
-void View::getSaveWorkspace() {
+void View::getSaveWorkspaceInput() {
     cout << endl;
     cout << "Enter 1 to save current workspace" << endl;
     cout << "Enter 2 to quit" << endl;
@@ -104,29 +129,4 @@ void View::getSaveWorkspace() {
     getline(cin, input);
 
     viewPimpl->controller->receivedSaveWorkspaceMenuInput(input);
-}
-
-void View::displayError(Event::EventError error, string errorMessage) {
-    string output = "";
-    switch(error) {
-        case Event::EventError::INVALID_APPLICATION_NAME:
-            output = "Invalid Application Name: " + errorMessage;
-            break;
-        case Event::EventError::TOO_MANY_APPLICATIONS:
-            output = "Can't have more than 2 applications per desktop";
-            break;
-        case Event::EventError::INVALID_FULLSCREEN:
-            output = "Can't have another application open with " + errorMessage + " in full screen";
-            break;
-        case Event::EventError::NO_SAVED_WORKSPACES:
-            output = "You don't have any saved workspaces";
-            break;
-        case Event::EventError::INVALID_NUMBER_INPUT:
-            output = "Input couldn't be parsed or was out of range";
-            break;
-        default:
-            return;
-    }
-
-    cerr << "Error: " + output << endl;
 }

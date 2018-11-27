@@ -8,6 +8,7 @@
 
 class StringUtils {
 public:
+    // Ensures: splits the text into individual strings separated by the delimiter, and adds them to the data vector
     static void split(std::vector<std::string> & data, std::string text, char delimiter) {
         std::stringstream ss(text);
         std::string token;
@@ -16,8 +17,9 @@ public:
         }
     }
     
+    // Ensures: splits the text into individual strings separated by the delimiter, and adds them to the data vector
     static void split(std::vector<std::string> & data, std::string text, std::string delimiter) {
-        int delimiterLength = delimiter.length();
+        const int delimiterLength = delimiter.length();
         size_t index = 0;
         std::string token;
 
@@ -36,6 +38,7 @@ public:
         }
     }
     
+    // Ensures: removes leading and trailing white space from the string s
     static void trim(std::string & s) {
         char c = s.at(0);
         while (c == ' ') {
@@ -50,6 +53,7 @@ public:
         }
     }
 
+    // Ensures: removes the Full Screen Delimiters (<, >) from the string s
     static void removeFullScreenDelimiters(std::string & s) {
         s = s.substr(1, s.length() - 1);
         s = s.substr(0, s.length() - 1);
@@ -61,6 +65,7 @@ public:
         return s;
     }
 
+    // Returns: true if a equals b, case insensitive
     static bool equalsIgnoreCase(std::string a, std::string b) {
         return StringUtils::str_tolower(a) == StringUtils::str_tolower(b);
     }
