@@ -8,6 +8,8 @@
 
 ## Usage
 
+### Before You Start...
+If you want `x` desktops, you need to open all `x` up yourself. Then, go to the leftmost desktop, and enjoy some automation :)
 ### Opening Your Workspace
 You may choose to create a new workspace, or load a workspace from the `preferences/workspaces.txt` preferences file.
 
