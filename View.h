@@ -30,6 +30,7 @@ public:
     static const char FULL_SCREEN_RIGHT_DELIMITER;
     
     View(std::shared_ptr<Controller> c, std::shared_ptr<SmartOpen> m);
+    
     ~View();
 
     void getNotified();

@@ -19,10 +19,9 @@ struct Application::ApplicationImpl {
         displayDimensions{displayDimensions} { }
 };
 
-Application::Application(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
-    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, processName, position, displayDimensions)} {}
-
-Application::~Application() {}
+/***************************************
+ *            Private Methods          *
+ ***************************************/
 
 void Application::open() {
     if (ScriptService::isApplicationRunning(this->applicationPimpl->processName)) {
@@ -95,6 +94,16 @@ void Application::setFullScreen() {
     string command2 = "osascript -e 'tell application \"System Events\" to keystroke \"f\" using {command down, control down}'";
     ScriptService::executeCommand(command2);
 }
+
+
+/***************************************
+ *            Public Methods           *
+ ***************************************/
+
+Application::Application(string appName, string alternateOpenPhrase, string processName, ApplicationPosition position, DisplayDimensions displayDimensions) :
+    applicationPimpl{make_unique<ApplicationImpl>(appName, alternateOpenPhrase, processName, position, displayDimensions)} {}
+
+Application::~Application() {}
 
 void Application::setupApplication() {
     if (this->applicationPimpl->position == ApplicationPosition::FULL_SCREEN) {

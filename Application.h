@@ -10,10 +10,20 @@ class Application {
 private:
     struct ApplicationImpl;
     std::unique_ptr<ApplicationImpl> applicationPimpl;
+
+    // Ensures: Opens the application, using launch keyword if not already active
     void open();
+
+    // Ensures: Opens the application using specified open phrase, otherwise using "New Window"
     void openWithAlternatePhrase();
+
+    // Ensures: Puts the application window into the correct location on the screen
     void putInPosition();
+
+    // Ensures: Activates the application window to ensure it is brought to the front of the screen
     void bringToFront();
+
+    // Ensures: Sets the application to be full screen
     void setFullScreen();
 public:
     enum ApplicationPosition { LEFT, MIDDLE, RIGHT, FULL_SCREEN };

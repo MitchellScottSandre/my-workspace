@@ -15,10 +15,13 @@ public:
     enum SWITCH_DESKTOP_DIRECTION { LEFT, RIGHT };
 
     Desktop(std::shared_ptr<Application> leftApp, std::shared_ptr<Application> rightApp);
+    
     Desktop(std::shared_ptr<Application> centreApp);
-    ~Desktop();
 
+    ~Desktop();
+ 
     void setupDesktop();
+
     std::string toString();
 };
 

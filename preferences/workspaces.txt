@@ -4,3 +4,5 @@ WORKSPACE[ Notes | Google Chrome || Maps | Stocks || Google Chrome | TextEdit ||
 WORKSPACE[ Visual Studio Code | Google Chrome || Visual Studio Code | Google Chrome ||]
 WORKSPACE[ Google Chrome | Visual Studio Code ||]
 WORKSPACE[ Google Chrome | Visual Studio Code || Google Chrome | Visual Studio Code ||]
+WORKSPACE[ iTunes | Notes || Google Chrome | Visual Studio Code || Google Chrome ||]
+WORKSPACE[ iTunes | Terminal || Google Chrome | Visual Studio Code || Google Chrome ||]

@@ -19,20 +19,33 @@ public:
     static const std::string OPEN_PHRASES_TOKEN;
     static const std::string PROCES_NAMES_TOKEN;
 
+    // Useful Booleans
     static const bool KEY_LOWERCASE = true;
     static const bool KEY_REGULAR = false;
 
-    static bool fileExists(std::string fileName);
-    static std::pair<std::string, std::string> parseKeyAndValue(std::string token, bool lowercaseKey);
-    static std::map<std::string, std::string> createMapOfTokens(std::string token, std::string fileName, bool lowercaseKey);
-    static std::vector<std::string> readTokenLines(std::string token, std::string fileName);
-
     FileService();
     ~FileService();
+
+    // Returns: True if the file with the given name does exists in the relative directory
+    static bool fileExists(std::string fileName);
+
+    // Returns: A pair of strings (key: value) for tokens of the form "key":"value"
+    static std::pair<std::string, std::string> parseKeyAndValue(std::string token, bool lowercaseKey);
+
+    // Returns: A map of strings (KVPs) extracted from the tokens of the lines from the given file name
+    static std::map<std::string, std::string> createMapOfTokens(std::string token, std::string fileName, bool lowercaseKey);
+
+    // Returns: A vector of strings of lines read from the given file
+    static std::vector<std::string> readTokenLines(std::string token, std::string fileName);
+
     static std::map<std::string, std::string> readAliases();
+
     static std::vector<std::string> readWorkspaces();
+
     static std::map<std::string, std::string> readOpenPhrases();
+
     static std::map<std::string, std::string>  readProcessNames();
+    
     static void createWorkspace(std::string workspace);
 };
 
